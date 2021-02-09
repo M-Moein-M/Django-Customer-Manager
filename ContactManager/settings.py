@@ -124,5 +124,5 @@ MEDIA_URL = '/images/'
 
 import os
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    BASE_DIR / 'static',
 ]

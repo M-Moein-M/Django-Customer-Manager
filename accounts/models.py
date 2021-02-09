@@ -31,5 +31,7 @@ class Order(models.Model):
 		('Pending', 'Pending')
 	)
 
+	customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
+	product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
 	status = models.CharField(max_length=100, choices=STATUS)
