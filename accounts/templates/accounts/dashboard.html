@@ -48,7 +48,7 @@
                         <td>{{order.product}}</td>
                         <td>{{order.date_created}}</td>
                         <td>{{order.status}}</td>
-                        <td><a class="btn btn-secondary  btn-sm btn-block" href="">Update</a></td>
+                        <td><a class="btn btn-secondary  btn-sm btn-block" href="{% url 'update_order' order.id %}">Update</a></td>
                         <td><a class="btn btn-danger  btn-sm btn-block" href="">Delete</a></td>
                     </tr>
                 {% endfor %}
