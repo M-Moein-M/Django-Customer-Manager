@@ -49,7 +49,7 @@
                         <td>{{order.date_created}}</td>
                         <td>{{order.status}}</td>
                         <td><a class="btn btn-secondary  btn-sm btn-block" href="{% url 'update_order' order.id %}">Update</a></td>
-                        <td><a class="btn btn-danger  btn-sm btn-block" href="">Delete</a></td>
+                        <td><a class="btn btn-danger  btn-sm btn-block" href="{% url 'delete_order' order.id %}">Delete</a></td>
                     </tr>
                 {% endfor %}
 
