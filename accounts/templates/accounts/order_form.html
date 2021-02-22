@@ -14,6 +14,18 @@
                 <hr>
                 {% endfor %}
 
+                {% if formset %}
+                    {{ formset.management_form }}
+                    {% for form in formset %}
+                    {{form}}
+                    <hr>
+                    {% endfor %}
+                {% endif %}
+
+                {% if form %}
+                    {{ form }}
+                {% endif %}
+
                 <input class="btn btn-success" type="submit" name="submit">
             </form>
 
