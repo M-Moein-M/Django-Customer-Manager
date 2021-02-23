@@ -17,5 +17,12 @@
                 </li>
             </ul>
         </div>
+
+        <div class="nav-item float-right m-1">
+            <span class="p-2 badge bg-secondary">{{ request.user }}</span>
+        </div>
+        <div class="nav-item float-right m-1">
+            <a class="btn btn-danger btn-sm" href="{% url 'logout' %}" role="button">Logout</a>
+        </div>
     </div>
 </nav>
