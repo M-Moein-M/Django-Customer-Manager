@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import *
-from .forms import OrderForm
+from .forms import OrderForm, CreateUserForm
 from django.forms import inlineformset_factory
 from .filters import OrderFilter
 
@@ -11,7 +11,15 @@ def loginPage(request):
 
 
 def registerPage(request):
-    context = {}
+    form = CreateUserForm()
+
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+
+    context = {'form': form}
     return render(request, 'accounts/register.html', context)
 
 
