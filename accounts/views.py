@@ -3,6 +3,7 @@ from .models import *
 from .forms import OrderForm, CreateUserForm
 from django.forms import inlineformset_factory
 from .filters import OrderFilter
+from django.contrib import messages
 
 
 def loginPage(request):
@@ -17,6 +18,8 @@ def registerPage(request):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, f'Account Was Created For {form.cleaned_data.get("username")}')
+
             return redirect('login')
 
     context = {'form': form}

@@ -14,7 +14,7 @@
 			margin: 0;
 			padding: 0;
 			height: 100%;
-			background: #7abecc !important;
+			background: #deffe8 !important;
 		}
 		.user_card {
 			width: 350px;
@@ -66,10 +66,11 @@
 			outline: 0px !important;
 		}
 
-		#messages{
-			background-color: grey;
+		.messages{
+			background-color: green;
 			color: #fff;
 			padding: 10px;
+			border-radius: 5px;
 			margin-top: 10px;
 		}
 	</style>
@@ -105,6 +106,10 @@
 					</form>
 
 				</div>
+
+                {% for message in messages %}
+                    <p class="messages">{{ message }}</p>
+                {% endfor %}
 
 				<div class="mt-4">
 					<div class="d-flex justify-content-center links">
