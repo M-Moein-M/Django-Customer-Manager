@@ -6,10 +6,10 @@ from .filters import OrderFilter
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .decorators import unauthenticated_user
+from .decorators import unauthenticated_user, allowed_user
 
-
-def userPage(request):
+@login_required(login_url='login')
+def home(request):
     context = {}
     return render(request, 'accounts/user.html', context)
 
@@ -53,7 +53,8 @@ def registerPage(request):
 
 
 @login_required(login_url='login')
-def home(request):
+@allowed_user(allowed_roles=['admin'])
+def adminPage(request):
     orders = Order.objects.all()
     customers = Customer.objects.all()
 
@@ -75,12 +76,14 @@ def home(request):
 
 
 @login_required(login_url='login')
+@allowed_user(allowed_roles=['admin'])
 def products(request):
     products = Product.objects.all()
     return render(request, 'accounts/products.html', {'products': products})
 
 
 @login_required(login_url='login')
+@allowed_user(allowed_roles=['admin'])
 def customer(request, customer_id):
     customer = Customer.objects.get(id=customer_id)
     orders = customer.order_set.all()
@@ -99,6 +102,7 @@ def customer(request, customer_id):
 
 
 @login_required(login_url='login')
+@allowed_user(allowed_roles=['admin'])
 def createOrder(request, pk):
     OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status'), extra=5)
     customer = Customer.objects.get(id=pk)
@@ -115,6 +119,7 @@ def createOrder(request, pk):
 
 
 @login_required(login_url='login')
+@allowed_user(allowed_roles=['admin'])
 def updateOrder(request, pk):
     order = Order.objects.get(id=pk)
     form = OrderForm(instance=order)
@@ -131,6 +136,7 @@ def updateOrder(request, pk):
 
 
 @login_required(login_url='login')
+@allowed_user(allowed_roles=['admin'])
 def deleteOrder(request, pk):
     order = Order.objects.get(id=pk)
 
