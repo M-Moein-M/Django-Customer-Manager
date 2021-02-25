@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from .decorators import unauthenticated_user, allowed_user
 
+
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['customer'])
 def home(request):
@@ -57,6 +58,9 @@ def registerPage(request):
             user = form.save()
             group = Group.objects.get(name='customer')
             user.groups.add(group)
+
+            Customer.objects.create(user=user)
+
             messages.success(request, f'Account Was Created For {form.cleaned_data.get("username")}')
 
             return redirect('login')
