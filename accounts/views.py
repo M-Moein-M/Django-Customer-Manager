@@ -10,8 +10,18 @@ from django.contrib.auth.models import Group
 from .decorators import unauthenticated_user, allowed_user
 
 @login_required(login_url='login')
+@allowed_user(allowed_roles=['customer'])
 def home(request):
-    context = {}
+    orders = request.user.customer.order_set.all()
+
+    total_orders = orders.count()
+    delivered = orders.filter(status='Delivered').count()
+    pending = orders.filter(status='Pending').count()
+
+    context = {'orders': orders,
+               'total_orders': total_orders,
+                'delivered': delivered,
+                'pending': pending}
     return render(request, 'accounts/user.html', context)
 
 
