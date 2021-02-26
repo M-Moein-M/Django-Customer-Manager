@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import *
-from .forms import OrderForm, CreateUserForm
+from .forms import OrderForm, CreateUserForm, CustomerForm
 from django.forms import inlineformset_factory
 from .filters import OrderFilter
 from django.contrib import messages
@@ -13,7 +13,16 @@ from .decorators import unauthenticated_user, allowed_user
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['customer'])
 def accountSettings(request):
-    context = {}
+    customer = request.user.customer
+    form = CustomerForm(instance=customer)
+
+    if request.method == 'POST':
+        form = CustomerForm(request.POST, request.FILES, instance=customer)
+        if form.is_valid():
+            form.save()
+
+    context = {'form': form}
+
     return render(request, 'accounts/accounts_settings.html', context)
 
 
