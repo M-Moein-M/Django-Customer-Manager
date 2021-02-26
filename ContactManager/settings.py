@@ -123,7 +123,8 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/images/'
 
-import os
+MEDIA_ROOT = BASE_DIR / 'static' / 'images'
+
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
