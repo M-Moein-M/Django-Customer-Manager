@@ -12,6 +12,13 @@ from .decorators import unauthenticated_user, allowed_user
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['customer'])
+def accountSettings(request):
+    context = {}
+    return render(request, 'accounts/accounts_settings.html', context)
+
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['customer'])
 def home(request):
     orders = request.user.customer.order_set.all()
 

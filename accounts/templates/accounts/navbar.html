@@ -20,6 +20,10 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'admin_page' %}">Admin-Page</a>
                 </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'account_settings' %}">Settings</a>
+                </li>
                 {% endif %}
 
             </ul>
