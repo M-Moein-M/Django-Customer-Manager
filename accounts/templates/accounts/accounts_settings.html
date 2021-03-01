@@ -19,17 +19,27 @@
 			<hr>
 			<h3 style="text-align: center">Account Settings</h3>
 			<hr>
-			<img class="profile-pic" src="{{request.user.customer.profile_pic.url}}" >
+			<img class="profile-pic" src="{{request.user.customer.profile_pic}}" >
 		
 		</div>
 	</div>
-	<div class="col-md-9">
+	<div class="col-md-6">
 		<div class="card card-body">
 			
 			<form method="POST" action="" enctype="multipart/form-data">
 				{% csrf_token %}
-				{{form.as_p}}
+				{{info_form.as_p}}
 		
+			<input class="btn btn-primary" type="submit" name="Update Information">
+			</form>
+
+			<hr>
+
+			<form method="POST" action="" enctype="multipart/form-data">
+				{% csrf_token %}
+				<h6>Choose a picture to change your profile picture</h6>
+				{{profile_pic_form.as_p}}
+
 			<input class="btn btn-primary" type="submit" name="Update Information">
 			</form>
 		</div>
