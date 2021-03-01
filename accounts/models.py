@@ -7,8 +7,10 @@ class Customer(models.Model):
 	name = models.CharField(max_length=100, null=True)
 	phone = models.CharField(max_length=100, null=True)
 	email = models.CharField(max_length=200, null=True)
-	profile_pic = models.ImageField(default='/DEFAULTPROFILEPIC_VIwfoSMcf7IB2kdI4yKa.svg', null=True, blank=True)
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
+
+	default_pfp = 'https://i.postimg.cc/8CsB3pgd/DEFAULTPROFILEPIC-VIwfo-SMcf7-IB2kd-I4y-Ka.png'
+	profile_pic = models.CharField(max_length=250, default=default_pfp)
 
 	def __str__(self):
 		return self.name
