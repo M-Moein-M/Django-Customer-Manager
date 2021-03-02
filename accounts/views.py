@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import *
+from .utils.account import handle_profilepic_post
 from .forms import *
 from django.forms import inlineformset_factory
 from .filters import OrderFilter
@@ -13,13 +13,14 @@ from .decorators import unauthenticated_user, allowed_user
 @allowed_user(allowed_roles=['customer'])
 def accountSettings(request):
     customer = request.user.customer
-    info_form = CustomerForm(instance=customer)
 
     if request.method == 'POST':
-        info_form = CustomerForm(request.POST, request.FILES, instance=customer)
+        handle_profilepic_post(request.FILES)
+        info_form = CustomerForm(request.POST, instance=customer)
         if info_form.is_valid():
             info_form.save()
 
+    info_form = CustomerForm(instance=customer)
     profile_pic_form = ProfilePictureForm()
     context = {'info_form': info_form,
                'profile_pic_form': profile_pic_form}
