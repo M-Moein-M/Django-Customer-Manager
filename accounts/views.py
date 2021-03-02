@@ -15,7 +15,7 @@ def accountSettings(request):
     customer = request.user.customer
 
     if request.method == 'POST':
-        handle_profilepic_post(request.FILES)
+        handle_profilepic_post(request.FILES, request.user.customer)
         info_form = CustomerForm(request.POST, instance=customer)
         if info_form.is_valid():
             info_form.save()

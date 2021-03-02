@@ -4,20 +4,25 @@ import requests
 import json
 
 
-def handle_profilepic_post(req_files):
+def handle_profilepic_post(req_files, customer):
 	files = dict(req_files)
 	if files.get('profile_pic') is not None:
-		upload_profilepic_to_host(base64.b64encode(files.get('profile_pic')[0].read()))
+		upload_profilepic_to_host(base64.b64encode(files.get('profile_pic')[0].read()), customer)
 	else:
 		return
 
 
-def upload_profilepic_to_host(pic):
+def save_new_profilepic(new_url, customer):
+	customer.profile_pic = new_url
+	customer.save(update_fields=['profile_pic'])
+
+
+def upload_profilepic_to_host(pic, customer):
 	data = {'image': pic}
 	url = ibb_api_url
 	res = requests.post(url, data)
 	res_data = json.loads(res.text)
-	print(res_data['data']['url'])
+	save_new_profilepic(res_data['data']['url'], customer)
 
 
 def get_ibb_api_key():
