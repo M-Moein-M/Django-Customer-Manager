@@ -25,3 +25,12 @@ class CustomerForm(ModelForm):
 
 class ProfilePictureForm(forms.Form):
 	profile_pic = forms.ImageField()
+
+
+class NewProductForm(ModelForm):
+	class Meta:
+		model = Product
+		fields = '__all__'
+		exclude = ['tags']
+
+	tags = forms.CharField(max_length=250)

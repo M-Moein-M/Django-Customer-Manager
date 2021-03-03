@@ -116,7 +116,8 @@ def products(request):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin'])
 def newProduct(request):
-    context = {}
+    prodForm = NewProductForm()
+    context = {'prodForm': prodForm}
     return render(request, 'accounts/new_product.html', context)
 
 
