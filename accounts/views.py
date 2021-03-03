@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .utils.account import handle_profilepic_post
+from .utils.account import handle_profilepic_post, is_user_authorized_to_visit_page
 from .forms import *
 from django.forms import inlineformset_factory
 from .filters import OrderFilter
@@ -114,8 +114,12 @@ def products(request):
 
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin'])
+@allowed_user(allowed_roles=['admin', 'customer'])
 def customer(request, customer_id):
+    authorized = is_user_authorized_to_visit_page(request.user, customer_id)
+    if not authorized:
+        return redirect('/')
+
     customer = Customer.objects.get(id=customer_id)
     orders = customer.order_set.all()
     orders_count = orders.count()

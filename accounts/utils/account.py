@@ -4,6 +4,13 @@ import requests
 import json
 
 
+def is_user_authorized_to_visit_page(req_user, authorized_id):
+	if req_user.groups.all()[0].name == 'admin':
+		return True
+	else:
+		return str(req_user.customer.id) == str(authorized_id)
+
+
 def handle_profilepic_post(req_files, customer):
 	files = dict(req_files)
 	if files.get('profile_pic') is not None:
