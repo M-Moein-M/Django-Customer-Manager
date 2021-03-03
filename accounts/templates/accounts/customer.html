@@ -6,16 +6,6 @@
 <div class="row m-1">
     <div class="col-md">
         <div class="card card-body">
-            <h5>Customer: <strong>{{ customer.name }}</strong></h5>
-            <hr>
-            <a class="btn btn-outline-info m-1 btn-sm btn-block" href="">Update Customer</a>
-            <a class="btn btn-outline-success m-1 btn-sm btn-block" href="{% url 'create_order' customer.id %}">Place Order</a>
-
-        </div>
-    </div>
-
-    <div class="col-md">
-        <div class="card card-body">
             <h5>Contact Information</h5>
             <hr>
             <p>Email: {{customer.email}}</p>
@@ -28,6 +18,14 @@
             <h5>Total Orders</h5>
             <hr>
             <h1 style="text-align: center;padding: 10px">{{orders_count}}</h1>
+        </div>
+    </div>
+
+    <div class="col-md">
+        <div class="card card-body">
+            <h5>Place New Order</h5>
+            <a class="btn btn-outline-success m-1 btn-lg btn-block" href="{% url 'create_order' customer.id %}">Place Order</a>
+
         </div>
     </div>
 </div>
