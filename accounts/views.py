@@ -114,6 +114,13 @@ def products(request):
 
 
 @login_required(login_url='login')
+@allowed_user(allowed_roles=['admin'])
+def newProduct(request):
+    context = {}
+    return render(request, 'accounts/new_product.html', context)
+
+
+@login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'customer'])
 def customer(request, customer_id):
     authorized = is_user_authorized_to_visit_page(request.user, customer_id)
