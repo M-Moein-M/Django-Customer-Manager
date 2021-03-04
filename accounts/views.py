@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .utils.account import handle_profilepic_post, is_user_authorized_to_visit_page
+from .utils.product import create_new_product
 from .forms import *
 from django.forms import inlineformset_factory
 from .filters import OrderFilter
@@ -116,6 +117,9 @@ def products(request):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin'])
 def newProduct(request):
+    if request.method == 'POST':
+        create_new_product(request)
+        return redirect('new_product')
     prodForm = NewProductForm()
     context = {'prodForm': prodForm}
     return render(request, 'accounts/new_product.html', context)
