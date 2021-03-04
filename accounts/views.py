@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from .utils.account import handle_profilepic_post, is_user_authorized_to_visit_page
+from .utils.account import is_user_authorized_to_visit_page
+from .utils.img_file_upload import ImgFieldUpload
 from .utils.product import create_new_product
 from .forms import *
 from django.forms import inlineformset_factory
@@ -16,7 +17,7 @@ def accountSettings(request):
     customer = request.user.customer
 
     if request.method == 'POST':
-        handle_profilepic_post(request.FILES, request.user.customer)
+        ImgFieldUpload(request.FILES, 'profile_pic', customer).save_pic()
         info_form = CustomerForm(request.POST, instance=customer)
         if info_form.is_valid():
             info_form.save()

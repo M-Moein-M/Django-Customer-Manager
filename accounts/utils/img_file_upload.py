@@ -24,7 +24,7 @@ class ImgFieldUpload:
 
 	def upload_pic_to_host(self):
 		pic = self.get_pic_from_files()
-		encoded_pic = base64.b64encode(pic), self.instance
+		encoded_pic = base64.b64encode(pic)
 		self.upload_encoded_pic_to_host(encoded_pic)
 
 	def get_pic_from_files(self):
@@ -40,7 +40,7 @@ class ImgFieldUpload:
 
 	def save_new_url_to_instance(self):
 		setattr(self.instance, self.model_field_name, self.pic_url)
-		self.instance.save(updated_fields=[self.model_field_name])
+		self.instance.save(update_fields=[self.model_field_name])
 
 
 def get_ibb_api_key():
