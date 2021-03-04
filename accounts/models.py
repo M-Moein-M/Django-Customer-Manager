@@ -17,7 +17,7 @@ class Customer(models.Model):
 
 
 class Tag(models.Model):
-	name = models.CharField(max_length=100)
+	name = models.CharField(max_length=100, default='__')
 
 	def __str__(self):
 		return self.name
@@ -35,6 +35,7 @@ class Product(models.Model):
 	description = models.CharField(max_length=1023, null=True, blank=True)
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
 	tags = models.ManyToManyField(Tag)
+	product_pic = models.CharField(max_length=250, default='https://i.ibb.co/6nTkL30/Unknown-Product.png')
 
 	def __str__(self):
 		return self.name

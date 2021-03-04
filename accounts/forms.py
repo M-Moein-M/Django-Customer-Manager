@@ -30,7 +30,7 @@ class ProfilePictureForm(forms.Form):
 class NewProductForm(ModelForm):
 	class Meta:
 		model = Product
-		fields = '__all__'
-		exclude = ['tags']
+		exclude = ['tags', 'product_pic']
 
 	tags = forms.CharField(max_length=250)
+	product_pic = forms.ImageField(required=False)
