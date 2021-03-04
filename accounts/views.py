@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .utils.account import is_user_authorized_to_visit_page
 from .utils.img_file_upload import ImgFieldUpload
-from .utils.product import create_new_product
+from .utils.product import SaveNewProduct
 from .forms import *
 from django.forms import inlineformset_factory
 from .filters import OrderFilter
@@ -119,7 +119,7 @@ def products(request):
 @allowed_user(allowed_roles=['admin'])
 def newProduct(request):
     if request.method == 'POST':
-        create_new_product(request)
+        SaveNewProduct(request).create_new_product()
         return redirect('new_product')
     prodForm = NewProductForm()
     context = {'prodForm': prodForm}
