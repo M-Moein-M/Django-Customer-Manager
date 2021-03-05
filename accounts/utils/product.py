@@ -8,31 +8,37 @@ class SaveNewProduct:
 		self.request = request
 		self.product = None
 		self.product_tags = []
+		self.prod_form = NewProductForm(self.request.POST, self.request.FILES)
 
 	def create_new_product(self):
-		prodForm = NewProductForm(self.request.POST, self.request.FILES)
-		if prodForm.is_valid():
-			self.product = prodForm.save()
-			ImgFieldUpload(self.request.FILES, 'product_pic', self.product).save_pic()
-			p_tags = prodForm.cleaned_data.get('tags')
-			self.add_all_tags_to_new_product(p_tags)
-		else:
-			print(f'** {prodForm.errors} **')
+		if self.prod_form.is_valid():
+			self.save_new_product()
 
-	def add_all_tags_to_new_product(self, p_tags):
-		tags = p_tags.split(',')
+	def save_new_product(self):
+		self.product = self.prod_form.save()
+		self.save_product_pic_to_host()
+		self.add_all_tags_to_new_product()
+
+	def save_product_pic_to_host(self):
+		ImgFieldUpload(self.request.FILES, 'product_pic', self.product).save_pic()
+
+	def add_all_tags_to_new_product(self):
+		tags = self.get_tags_list_from_form_data()
 		for tag_name in tags:
-			t = ProductTag(tag_name)
-			if t.is_tag_valid():
-				self.product_tags.append(t.tag_obj)
-
+			self.append_tag_to_product_tags_list(tag_name)
 		self.save_added_tags_to_product()
 
+	def get_tags_list_from_form_data(self):
+		p_tags = self.prod_form.cleaned_data.get('tags')
+		return p_tags.split(',')
+
+	def append_tag_to_product_tags_list(self, tag_name):
+		t = ProductTag(tag_name)
+		if t.is_tag_valid():
+			self.product_tags.append(t.tag_obj)
+
 	def save_added_tags_to_product(self):
-		print(f'product tags:	{self.product_tags}')
-		for t in self.product_tags:
-			self.product.tags.add(t)
-		# self.product.tags.add(*self.product_tags)
+		self.product.tags.add(*self.product_tags)
 
 
 class ProductTag:
