@@ -109,7 +109,7 @@ def adminPage(request):
 
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin'])
+@allowed_user(allowed_roles=['admin', 'customer'])
 def products(request):
     products = Product.objects.all()
     return render(request, 'accounts/products.html', {'products': products})

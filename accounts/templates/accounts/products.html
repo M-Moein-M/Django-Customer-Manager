@@ -2,31 +2,26 @@
 
 {% block content %}
 <br>
-
-<div class="row m-1">
-    <div class="col-md">
-        <div class="card card-body">
-            <h5>Products</h5>
-        </div>
-        <div class="card card-body">
-            <table class="table">
-                <tr>
-                    <th>Product</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                </tr>
-
-                {% for i in products %}
-                <tr>
-                    <td>{{i.name}}</td>
-                    <td>{{i.category}}</td>
-                    <td>{{i.price}}</td>
-                </tr>
-                {% endfor %}
-
-            </table>
+<h3>Products</h3>
+<div class="row m-1 justify-content-center">
+    {% for i in products %}
+    <div class="col-6 col-md-4 col-lg-3">
+        <div class="card m-1">
+            <div style="background-image:url('{{i.product_pic}}'); height: 300px; width: auto;background-position: 50% 50%;
+                        background-repeat: no-repeat;
+                        background-size: cover;">
+            </div>
+            <div class="card-body">
+                <p><h4>{{i.name}}</h4></p>
+                <p><strong>{{i.description}}</strong></p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">{{i.category}}</li>
+                <li class="list-group-item">{{i.price}}$</li>
+            </ul>
         </div>
     </div>
-
+    {% endfor %}
 </div>
+
 {% endblock %}
