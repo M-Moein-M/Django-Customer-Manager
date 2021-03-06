@@ -34,3 +34,7 @@ class NewProductForm(ModelForm):
 
 	tags = forms.CharField(max_length=250)
 	product_pic = forms.ImageField(required=False)
+
+
+class NewOrderForm(forms.Form):
+	quantity = forms.IntegerField(min_value=1)
