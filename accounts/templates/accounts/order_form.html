@@ -18,6 +18,7 @@
                     <p>You've requested to place order for <strong>{{product_name}}</strong>
                         and price of <strong>{{product_price}}$</strong>.</p>
                     <p>Do you want to proceed?</p>
+                    {{ new_order_form.as_p }}
                     <input class="btn btn-success" type="submit" name="submit">
                     <a class="btn btn-danger" href="{% url 'products'%}">Cancel</a>
                 </form>

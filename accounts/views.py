@@ -159,7 +159,8 @@ def createOrder(request, pk):
     product = Product.objects.get(id=pk)
     context = {'product_name': product.name,
                'product_pic': product.product_pic,
-               'product_price': product.price}
+               'product_price': product.price,
+               'new_order_form': NewOrderForm(initial={'quantity': 1})}
     return render(request, 'accounts/order_form.html', context)
 
 
