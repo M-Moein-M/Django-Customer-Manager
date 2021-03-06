@@ -2,32 +2,26 @@
 
 {% load static %}
 {% block content %}
+<br>
+<h3>Place Order</h3>
 
 <div class="row justify-content-center m-1">
     <div class="col-md-6">
-        <div class="card card-body">
-            <form action="" method="post">
-                {% csrf_token %}
-                {{ formset.management_form }}
-                {% for form in formset %}
-                {{form}}
-                <hr>
-                {% endfor %}
-
-                {% if formset %}
-                    {{ formset.management_form }}
-                    {% for form in formset %}
-                    {{form}}
-                    <hr>
-                    {% endfor %}
-                {% endif %}
-
-                {% if form %}
-                    {{ form }}
-                {% endif %}
-
-                <input class="btn btn-success" type="submit" name="submit">
-            </form>
+        <div class="card m-1">
+            <div style="background-image:url('{{product_pic}}'); height: 300px; width: auto;background-position: 50% 50%;
+                        background-repeat: no-repeat;
+                        background-size: cover;">
+            </div>
+            <div class="card-body">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <p>You've requested to place order for <strong>{{product_name}}</strong>
+                        and price of <strong>{{product_price}}$</strong>.</p>
+                    <p>Do you want to proceed?</p>
+                    <input class="btn btn-success" type="submit" name="submit">
+                    <a class="btn btn-danger" href="{% url 'products'%}">Cancel</a>
+                </form>
+            </div>
 
         </div>
     </div>

@@ -3,7 +3,6 @@ from .utils.account import is_user_authorized_to_visit_page
 from .utils.img_file_upload import ImgFieldUpload
 from .utils.product import SaveNewProduct
 from .forms import *
-from django.forms import inlineformset_factory
 from .filters import OrderFilter
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -150,19 +149,15 @@ def customer(request, customer_id):
 
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin'])
+@allowed_user(allowed_roles=['customer'])
 def createOrder(request, pk):
-    OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status'), extra=5)
-    customer = Customer.objects.get(id=pk)
-    formset = OrderFormSet(queryset=Order.objects.none(), instance=customer)
-
     if request.method == 'POST':
-        formset = OrderFormSet(request.POST, instance=customer)
-        if formset.is_valid():
-            formset.save()
-            return redirect('/')
+        return redirect('products')
 
-    context = {'formset': formset}
+    product = Product.objects.get(id=pk)
+    context = {'product_name': product.name,
+               'product_pic': product.product_pic,
+               'product_price': product.price}
     return render(request, 'accounts/order_form.html', context)
 
 
