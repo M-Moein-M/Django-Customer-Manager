@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .utils.account import is_user_authorized_to_visit_page
 from .utils.img_file_upload import ImgFieldUpload
 from .utils.product import SaveNewProduct
+from .utils.order import SaveNewOrder
 from .forms import *
 from .filters import OrderFilter
 from django.contrib import messages
@@ -152,6 +153,7 @@ def customer(request, customer_id):
 @allowed_user(allowed_roles=['customer'])
 def createOrder(request, pk):
     if request.method == 'POST':
+        SaveNewOrder(request, pk).save_order()
         return redirect('products')
 
     product = Product.objects.get(id=pk)
