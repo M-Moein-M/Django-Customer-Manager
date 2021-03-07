@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
-from .utils.account import is_user_authorized_to_visit_page
-from .utils.img_file_upload import ImgFieldUpload
+from .utils.account import is_user_authorized_to_visit_page, SaveCustomerSettings
 from .utils.product import SaveNewProduct
 from .utils.order import SaveNewOrder
 from .forms import *
@@ -14,15 +13,13 @@ from .decorators import unauthenticated_user, allowed_user
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['customer'])
 def accountSettings(request):
-    customer = request.user.customer
-
     if request.method == 'POST':
-        ImgFieldUpload(request.FILES, 'profile_pic', customer).save_pic()
-        info_form = CustomerForm(request.POST, instance=customer)
-        if info_form.is_valid():
-            info_form.save()
-
-    info_form = CustomerForm(instance=customer)
+        SaveCustomerSettings(request).save_settings()
+    customer = request.user.customer
+    form_initial = {'name':customer.name,
+                    'phone':customer.phone,
+                    'email': customer.user.email}
+    info_form = CustomerForm(data=form_initial, instance=customer)
     profile_pic_form = ProfilePictureForm()
     context = {'info_form': info_form,
                'profile_pic_form': profile_pic_form}
