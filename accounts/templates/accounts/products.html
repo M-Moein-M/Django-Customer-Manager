@@ -5,7 +5,7 @@
 <h3>Products</h3>
 <div class="row m-1 justify-content-center">
     {% for i in products %}
-    <div class="col-6 col-md-4 col-lg-3">
+    <div class="col-md-6 col-lg-4">
         <div class="card m-1">
             <div style="background-image:url('{{i.product_pic}}'); height: 300px; width: auto;background-position: 50% 50%;
                         background-repeat: no-repeat;
@@ -16,7 +16,12 @@
                 <p><strong>{{i.description}}</strong></p>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">{{i.category}}</li>
+                <li class="list-group-item">
+                    <span class="badge bg-info text-white">{{i.category}}</span>
+                    {% for t in i.tags.all %}
+                        <span class="badge bg-secondary text-white">{{t.name}}</span>
+                    {% endfor %}
+                </li>
                 <li class="list-group-item">{{i.price}}$</li>
                 <li class="list-group-item">
                     <div class="btn-group" style="width:100%">
