@@ -22,6 +22,7 @@ class CustomerForm(ModelForm):
 		fields = '__all__'
 		exclude = ['user', 'profile_pic']
 
+	email = forms.CharField(max_length=200)
 
 class ProfilePictureForm(forms.Form):
 	profile_pic = forms.ImageField()
