@@ -116,7 +116,11 @@ def products(request):
 @allowed_user(allowed_roles=['admin'])
 def editProduct(request, pk):
     product = Product.objects.get(id=pk)
-    context = {'product_pic': product.product_pic}
+    tags = ', '.join([t.name for t in product.tags.all()])
+    edit_form = NewProductForm(initial={'tags': tags},
+                               instance=product)
+    context = {'product_pic': product.product_pic,
+               'edit_form': edit_form}
     return render(request, 'accounts/product_edit.html', context)
 
 
