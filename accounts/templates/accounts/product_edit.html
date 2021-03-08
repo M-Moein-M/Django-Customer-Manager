@@ -1,0 +1,30 @@
+{% extends 'accounts/main.html' %}
+
+{% load static %}
+{% block content %}
+<br>
+<h3>Edit Product</h3>
+
+<div class="row justify-content-center m-1">
+    <div class="col-md-6">
+        <div class="card m-1">
+            <div style="background-image:url('{{product_pic}}'); height: 300px; width: auto;background-position: 50% 50%;
+                        background-repeat: no-repeat;
+                        background-size: cover;">
+            </div>
+            <div class="card-body">
+                <form action="" method="post">
+                    {% csrf_token %}
+
+                    RENDER FORM HERE
+
+                    <input class="btn btn-success" type="submit" name="submit">
+                    <a class="btn btn-danger" href="{% url 'products'%}">Cancel</a>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

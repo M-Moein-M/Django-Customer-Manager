@@ -114,6 +114,14 @@ def products(request):
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin'])
+def editProduct(request, pk):
+    product = Product.objects.get(id=pk)
+    context = {'product_pic': product.product_pic}
+    return render(request, 'accounts/product_edit.html', context)
+
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin'])
 def newProduct(request):
     if request.method == 'POST':
         SaveNewProduct(request).create_new_product()
