@@ -4,11 +4,13 @@ from .img_file_upload import ImgFieldUpload
 
 
 class SaveNewProduct:
-	def __init__(self, request):
+	def __init__(self, request, edit_instance=None):
 		self.request = request
 		self.product = None
 		self.product_tags = []
-		self.prod_form = NewProductForm(self.request.POST, self.request.FILES)
+		self.prod_form = NewProductForm(self.request.POST,
+										self.request.FILES,
+										instance=edit_instance)
 
 	def create_new_product(self):
 		if self.prod_form.is_valid():
@@ -38,6 +40,7 @@ class SaveNewProduct:
 			self.product_tags.append(t.tag_obj)
 
 	def save_added_tags_to_product(self):
+		self.product.tags.clear()
 		self.product.tags.add(*self.product_tags)
 
 

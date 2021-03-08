@@ -116,6 +116,9 @@ def products(request):
 @allowed_user(allowed_roles=['admin'])
 def editProduct(request, pk):
     product = Product.objects.get(id=pk)
+    if request.method == 'POST':
+        SaveNewProduct(request, edit_instance=product).create_new_product()
+        return redirect('edit_product', pk=pk)
     tags = ', '.join([t.name for t in product.tags.all()])
     edit_form = NewProductForm(initial={'tags': tags},
                                instance=product)
