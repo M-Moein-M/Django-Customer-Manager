@@ -25,7 +25,11 @@
                 <li class="list-group-item">{{i.price}}$</li>
                 <li class="list-group-item">
                     <div class="btn-group" style="width:100%">
+                        {% if request.user.is_staff %}
+                        <a class="btn btn-outline-dark m-1 btn-block" href="{% url 'edit_product' i.id %}">Edit Product</a>
+                        {% else %}
                         <a class="btn btn-outline-dark m-1 btn-block" href="{% url 'create_order' i.id %}">Place Order</a>
+                        {% endif %}
                     </div>
                 </li>
 
