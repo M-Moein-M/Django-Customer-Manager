@@ -7,7 +7,6 @@ class SaveNewProduct:
 	def __init__(self, request, edit_instance=None):
 		self.request = request
 		self.product = None
-		self.product_tags = []
 		self.prod_form = NewProductForm(self.request.POST,
 										self.request.FILES,
 										instance=edit_instance)
@@ -19,19 +18,26 @@ class SaveNewProduct:
 	def save_new_product(self):
 		self.product = self.prod_form.save()
 		self.save_product_pic_to_host()
-		self.add_all_tags_to_new_product()
+		SaveProductTags(self.product, self.prod_form).save_tags()
 
 	def save_product_pic_to_host(self):
 		ImgFieldUpload(self.request.FILES, 'product_pic', self.product).save_pic()
 
-	def add_all_tags_to_new_product(self):
+
+class SaveProductTags:
+	def __init__(self, product, product_form):
+		self.product = product
+		self.product_form = product_form
+		self.product_tags = []
+
+	def save_tags(self):
 		tags = self.get_tags_list_from_form_data()
 		for tag_name in tags:
 			self.append_tag_to_product_tags_list(tag_name)
-		self.save_added_tags_to_product()
+		self.update_product_tags()
 
 	def get_tags_list_from_form_data(self):
-		p_tags = self.prod_form.cleaned_data.get('tags')
+		p_tags = self.product_form.cleaned_data.get('tags')
 		return p_tags.split(',')
 
 	def append_tag_to_product_tags_list(self, tag_name):
@@ -39,7 +45,7 @@ class SaveNewProduct:
 		if t.is_tag_valid():
 			self.product_tags.append(t.tag_obj)
 
-	def save_added_tags_to_product(self):
+	def update_product_tags(self):
 		self.product.tags.clear()
 		self.product.tags.add(*self.product_tags)
 
