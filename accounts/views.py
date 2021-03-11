@@ -180,17 +180,11 @@ def createOrder(request, pk):
 @allowed_user(allowed_roles=['admin'])
 def updateOrder(request, pk):
     order = Order.objects.get(id=pk)
-    form = OrderForm(instance=order)
-
     if request.method == 'POST':
-        form = OrderForm(request.POST, instance=order)
-        if form.is_valid():
-            form.save()
-            return redirect('/')
+        return redirect('admin_page')
 
-    context = {'form': form}
-
-    return render(request, 'accounts/order_form.html', context)
+    context = {'product_pic': order.product.product_pic}
+    return render(request, 'accounts/order_update.html', context)
 
 
 @login_required(login_url='login')
