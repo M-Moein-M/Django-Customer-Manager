@@ -1,6 +1,5 @@
 from ..models import Customer, Product, Order
-from django.core.exceptions import ObjectDoesNotExist
-from ..forms import NewOrderForm
+from ..forms import NewOrderForm, UpdateOrderForm
 
 
 class SaveNewOrder:
@@ -37,3 +36,13 @@ class SaveNewOrder:
 					 product=self.product,
 					 status='Pending',
 					 quantity=self.quantity)
+
+class UpdateOrder:
+	def __init__(self, request, order_instance):
+		self.request = request
+		self.instance = order_instance
+
+	def update_order(self):
+		form = UpdateOrderForm(self.request.POST, instance=self.instance)
+		if form.is_valid():
+			form.save()
