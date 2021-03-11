@@ -4,10 +4,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.contrib.auth.models import User
 
-class OrderForm(ModelForm):
+
+class UpdateOrderForm(ModelForm):
 	class Meta:
 		model = Order
-		fields = '__all__'
+		fields = ['status']
 
 
 class CreateUserForm(UserCreationForm):
