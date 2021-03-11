@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .utils.account import is_user_authorized_to_visit_page, SaveCustomerSettings
 from .utils.product import SaveNewProduct
-from .utils.order import SaveNewOrder
+from .utils.order import SaveNewOrder, UpdateOrder
 from .forms import *
 from .filters import OrderFilter
 from django.contrib import messages
@@ -180,10 +180,14 @@ def createOrder(request, pk):
 @allowed_user(allowed_roles=['admin'])
 def updateOrder(request, pk):
     order = Order.objects.get(id=pk)
+    form = UpdateOrderForm(instance=order)
     if request.method == 'POST':
+        UpdateOrder(request, order).update_order()
         return redirect('admin_page')
 
-    context = {'product_pic': order.product.product_pic}
+    context = {'product': order.product,
+               'update_form': form,
+               'order_quantity': order.quantity}
     return render(request, 'accounts/order_update.html', context)
 
 
