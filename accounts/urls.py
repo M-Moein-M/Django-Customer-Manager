@@ -13,6 +13,7 @@ urlpatterns = [
 
     path('order/new/<str:pk>', views.createOrder, name='create_order'),
     path('order/update/<str:pk>', views.updateOrder, name='update_order'),
+    path('order/all/<str:page>', views.showOrders, name='all_order'),
     path('delete_order/<str:pk>', views.deleteOrder, name='delete_order'),
 
     path('register', views.registerPage, name='register'),

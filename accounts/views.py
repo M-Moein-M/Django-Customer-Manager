@@ -202,3 +202,20 @@ def deleteOrder(request, pk):
 
     context = {'item': order}
     return render(request, 'accounts/delete_order.html', context)
+
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin'])
+def showOrders(request, page):
+    page = int(page)
+    if page < 1:
+        return redirect('all_order', 1)
+    orders_per_page = 5
+    first_order = orders_per_page * (page-1)
+    last_order = first_order+orders_per_page
+    orders = Order.objects.order_by('date_created')[first_order:last_order]
+    context = {'orders': orders,
+               'page': page,
+               'next_page': page+1,
+               'prev_page': page-1}
+    return render(request, 'accounts/order_all.html', context)
