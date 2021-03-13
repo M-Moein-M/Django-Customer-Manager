@@ -212,5 +212,6 @@ def showOrders(request, page):
     context = {'orders': orders,
                'page': page,
                'next_page': page+1,
-               'prev_page': page-1}
+               'prev_page': page-1,
+               'pages_count': ListOrders.count_pages()}
     return render(request, 'accounts/order_all.html', context)
