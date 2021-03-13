@@ -46,3 +46,22 @@ class UpdateOrder:
 		form = UpdateOrderForm(self.request.POST, instance=self.instance)
 		if form.is_valid():
 			form.save()
+
+class ListOrders:
+	orders_per_page = 3
+	def __init__(self, page_num):
+		p = int(page_num)
+		p = p if p > 0 else 1
+		self.set_first_and_last_index(p)
+
+	def set_first_and_last_index(self, page):
+		self.first_order = self.orders_per_page * (page - 1)
+		self.last_order = self.first_order + self.orders_per_page
+
+	def get_orders(self):
+		orders = Order.objects.order_by('date_created')[self.first_order: self.last_order]
+		return orders
+
+	@staticmethod
+	def count_pages():
+		return Order.objects.count()

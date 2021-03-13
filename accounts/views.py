@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .utils.account import is_user_authorized_to_visit_page, SaveCustomerSettings
 from .utils.product import SaveNewProduct
-from .utils.order import SaveNewOrder, UpdateOrder
+from .utils.order import SaveNewOrder, UpdateOrder, ListOrders
 from .forms import *
 from .filters import OrderFilter
 from django.contrib import messages
@@ -208,12 +208,7 @@ def deleteOrder(request, pk):
 @allowed_user(allowed_roles=['admin'])
 def showOrders(request, page):
     page = int(page)
-    if page < 1:
-        return redirect('all_order', 1)
-    orders_per_page = 5
-    first_order = orders_per_page * (page-1)
-    last_order = first_order+orders_per_page
-    orders = Order.objects.order_by('date_created')[first_order:last_order]
+    orders = ListOrders(page).get_orders()
     context = {'orders': orders,
                'page': page,
                'next_page': page+1,
