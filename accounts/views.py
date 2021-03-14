@@ -166,6 +166,7 @@ def customer(request, customer_id):
 def createOrder(request, pk):
     if request.method == 'POST':
         SaveNewOrder(request, pk).save_order()
+        messages.success(request, 'Order successfully saved.')
         return redirect('products')
 
     product = Product.objects.get(id=pk)
