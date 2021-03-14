@@ -7,12 +7,12 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 
+
 	<style>
 		body,
 		html {
 			margin: 0;
 			padding: 0;
-			height: 100%;
 			background: #deffe8 !important;
 		}
 		.user_card {
@@ -38,7 +38,9 @@
 
 		#form-title{
 			color: #fff;
+
 		}
+
 		.login_btn {
 			width: 100%;
 			background: #33ccff !important;
@@ -62,17 +64,30 @@
 			box-shadow: none !important;
 			outline: 0px !important;
 		}
-
 	</style>
 
 </head>
 <body>
-	<div class="container h-100">
+	<div class="container my-5">
 		<div class="d-flex justify-content-center h-100">
 			<div class="user_card">
 				<div class="d-flex justify-content-center">
 					<h3 id="form-title">REGISTER ACCOUNT</h3>
 				</div>
+
+                {% if form.errors %}
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                {{ error|escape }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
+
 				<div class="d-flex justify-content-center form_container">
 
 					<form method="POST" action="">
@@ -109,8 +124,6 @@
 					</form>
 				</div>
 
-                {{ form.errors }}
-
 				<div class="mt-4">
 					<div class="d-flex justify-content-center links">
 						Already have an account? <a href="{% url 'login' %}" class="ml-2">Login</a>
@@ -119,6 +132,9 @@
 			</div>
 		</div>
 	</div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 	<script>
 		var form_fields = document.getElementsByTagName('input')
 		form_fields[1].placeholder='Username..';
