@@ -13,7 +13,6 @@
 		html {
 			margin: 0;
 			padding: 0;
-			height: 100%;
 			background: #deffe8 !important;
 		}
 		.user_card {
@@ -65,26 +64,19 @@
 			box-shadow: none !important;
 			outline: 0px !important;
 		}
-
-		.messages{
-			background-color: gray;
-			color: #fff;
-			padding: 10px;
-			border-radius: 5px;
-			margin-top: 10px;
-		}
 	</style>
 
 </head>
 <body>
-	<div class="container h-100">
+	<div class="container my-5">
 		<div class="d-flex justify-content-center h-100">
 			<div class="user_card">
 				<div class="d-flex justify-content-center">
-
-
 					<h3 id="form-title">LOGIN</h3>
 				</div>
+
+				{% include 'accounts/messages.html' %}
+
 				<div class="d-flex justify-content-center form_container">
 					<form method="POST" action="">
                         {% csrf_token %}
@@ -109,10 +101,6 @@
 
 				</div>
 
-                {% for message in messages %}
-                    <p class="messages">{{ message }}</p>
-                {% endfor %}
-
 				<div class="mt-4">
 					<div class="d-flex justify-content-center links">
 						Don't have an account? <a href="{% url 'register' %}" class="ml-2">Sign Up</a>
@@ -125,6 +113,9 @@
 			</div>
 		</div>
 	</div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>
