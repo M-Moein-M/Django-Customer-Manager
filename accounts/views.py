@@ -15,6 +15,7 @@ from .decorators import unauthenticated_user, allowed_user
 def accountSettings(request):
     if request.method == 'POST':
         SaveCustomerSettings(request).save_settings()
+        messages.success(request, 'Account Settings Saved')
     customer = request.user.customer
     form_initial = {'name':customer.name,
                     'phone':customer.phone,
