@@ -185,6 +185,7 @@ def updateOrder(request, pk):
     form = UpdateOrderForm(instance=order)
     if request.method == 'POST':
         UpdateOrder(request, order).update_order()
+        messages.success(request, 'Order Successfully Updated')
         return redirect('admin_page')
 
     context = {'product': order.product,
