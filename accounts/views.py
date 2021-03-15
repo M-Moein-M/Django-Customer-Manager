@@ -133,6 +133,7 @@ def editProduct(request, pk):
 def newProduct(request):
     if request.method == 'POST':
         SaveNewProduct(request).create_new_product()
+        messages.success(request, 'New Product Successfully Saved')
         return redirect('new_product')
     prodForm = NewProductForm()
     context = {'prodForm': prodForm}
