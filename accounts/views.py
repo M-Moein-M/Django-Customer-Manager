@@ -119,6 +119,7 @@ def editProduct(request, pk):
     product = Product.objects.get(id=pk)
     if request.method == 'POST':
         SaveNewProduct(request, edit_instance=product).create_new_product()
+        messages.success(request, 'Product Successfully Edited')
         return redirect('edit_product', pk=pk)
     tags = ', '.join([t.name for t in product.tags.all()])
     edit_form = NewProductForm(initial={'tags': tags},
