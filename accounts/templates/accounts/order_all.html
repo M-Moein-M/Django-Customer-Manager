@@ -6,36 +6,41 @@
 <h3>View Orders</h3>
 
 <div class="row justify-content-center m-1">
+    <div class="col-sm-2">
+        FILTERS
+    </div>
+    <div class="col-sm-10">
+        <div class="card card-body">
+            <table class="table table-sm">
+                <tr>
+                    <th>Product</th>
+                    <th>Date Ordered</th>
+                    <th>Status</th>
+                    <th>Update</th>
+                </tr>
 
-    <div class="card card-body">
-        <table class="table table-sm">
-            <tr>
-                <th>Product</th>
-                <th>Date Ordered</th>
-                <th>Status</th>
-                <th>Update</th>
-            </tr>
+                {% for order in orders %}
+                <tr>
+                    <td>{{order}}</td>
+                    <td>{{order.date_created}}</td>
+                    <td>{{order.status}}</td>
+                    <td><a class="btn btn-secondary  btn-sm btn-block"
+                           href="{% url 'update_order' order.id %}">Update</a>
+                    </td>
+                </tr>
+                {% endfor %}
 
-            {% for order in orders %}
-            <tr>
-                <td>{{order}}</td>
-                <td>{{order.date_created}}</td>
-                <td>{{order.status}}</td>
-                <td><a class="btn btn-secondary  btn-sm btn-block" href="{% url 'update_order' order.id %}">Update</a>
-                </td>
-            </tr>
-            {% endfor %}
-
-        </table>
+            </table>
+        </div>
+        <div class="row justify-content-center m-1">
+            <p class="text-center">
+                <a class="btn btn-secondary btn-sm mx-5" href="{% url 'all_order' prev_page %}">Previous</a>
+                Page: <strong>{{page}}</strong> of {{pages_count}}
+                <a class="btn btn-secondary btn-sm mx-5" href="{% url 'all_order' next_page %}">Next</a>
+            </p>
+        </div>
     </div>
 </div>
 
-<div class="row justify-content-center m-1">
-        <p class="text-center">
-            <a class="btn btn-secondary btn-sm mx-5" href="{% url 'all_order' prev_page %}">Previous</a>
-            Page: <strong>{{page}}</strong> of {{pages_count}}
-            <a class="btn btn-secondary btn-sm mx-5" href="{% url 'all_order' next_page %}">Next</a>
-        </p>
-</div>
 
 {% endblock %}
