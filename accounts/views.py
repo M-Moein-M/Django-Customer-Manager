@@ -86,7 +86,7 @@ def registerPage(request):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin'])
 def adminPage(request):
-    orders = Order.objects.all()
+    orders = Order.objects.order_by('date_created')
     customers = Customer.objects.all()
 
     total_customers = customers.count()
@@ -95,7 +95,7 @@ def adminPage(request):
     pending = orders.filter(status='Pending').count()
 
     context = {
-        'orders': orders,
+        'orders': orders[:5],
         'customers': customers,
         'total_customers': total_customers,
         'total_orders': total_orders,
