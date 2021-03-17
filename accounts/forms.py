@@ -40,3 +40,7 @@ class NewProductForm(ModelForm):
 
 class NewOrderForm(forms.Form):
 	quantity = forms.IntegerField(min_value=1)
+
+
+class OrderFilterForm(forms.Form):
+	product_name = forms.CharField(max_length=255)
