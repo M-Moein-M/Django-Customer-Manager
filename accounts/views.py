@@ -213,12 +213,13 @@ def deleteOrder(request, pk):
 @allowed_user(allowed_roles=['admin'])
 def showOrders(request, page):
     page = int(page)
-    orders = ListOrders(page).get_orders()
-    filter_form = OrderFilterForm()
+    lister = ListOrders(request, page)
+    orders = lister.get_orders()
+    filter_form = OrderFilterForm(initial=request.GET)
     context = {'orders': orders,
                'page': page,
                'next_page': page+1,
                'prev_page': page-1,
-               'pages_count': ListOrders.count_pages(),
+               'pages_count': lister.count_pages(),
                'filter_form': filter_form}
     return render(request, 'accounts/order_all.html', context)

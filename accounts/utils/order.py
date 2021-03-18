@@ -1,5 +1,6 @@
 from ..models import Customer, Product, Order
-from ..forms import NewOrderForm, UpdateOrderForm
+from ..forms import NewOrderForm, UpdateOrderForm, OrderFilterForm
+import math
 
 
 class SaveNewOrder:
@@ -49,7 +50,8 @@ class UpdateOrder:
 
 class ListOrders:
 	orders_per_page = 7
-	def __init__(self, page_num):
+	def __init__(self, request, page_num):
+		self.filter = FilterOrders(request)
 		p = int(page_num)
 		p = p if p > 0 else 1
 		self.set_first_and_last_index(p)
@@ -59,9 +61,29 @@ class ListOrders:
 		self.last_order = self.first_order + self.orders_per_page
 
 	def get_orders(self):
-		orders = Order.objects.order_by('date_created')[self.first_order: self.last_order]
-		return orders
+		return self.filter.get_filtered_orders()
 
-	@classmethod
-	def count_pages(cls):
-		return Order.objects.count() // cls.orders_per_page + 1
+	def count_pages(self):
+		return self.filter.count_pages()
+
+
+class FilterOrders:
+	def __init__(self, request):
+		self.request = request
+
+		self.query_dict = request.GET.dict()
+		if not self.query_dict:
+			self.filtered = Order.objects.all()
+		else:
+			prod_name = [x.strip() for x in self.query_dict.get('product_name', '').split(',')]
+			del self.query_dict['product_name']
+			del self.query_dict['submit']
+			if any(prod_name):
+				self.query_dict['product__name__in'] = prod_name
+			self.filtered = Order.objects.filter(**self.query_dict)
+
+	def get_filtered_orders(self):
+		return self.filtered
+
+	def count_pages(self):
+		return math.ceil(len(self.filtered)/ListOrders.orders_per_page)
