@@ -1,5 +1,5 @@
 from ..models import Customer, Product, Order
-from ..forms import NewOrderForm, UpdateOrderForm, OrderFilterForm
+from ..forms import NewOrderForm, UpdateOrderForm
 import math
 
 
@@ -61,7 +61,7 @@ class ListOrders:
 		self.last_order = self.first_order + self.orders_per_page
 
 	def get_orders(self):
-		return self.filter.get_filtered_orders()
+		return self.filter.get_filtered_orders()[self.first_order: self.last_order]
 
 	def count_pages(self):
 		return self.filter.count_pages()
