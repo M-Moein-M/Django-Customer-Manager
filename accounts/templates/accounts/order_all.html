@@ -7,11 +7,8 @@
 
 <div class="row justify-content-center m-1">
     <div class="col-sm-3">
-        <form action="" method="post">
-            {% csrf_token %}
-
+        <form action="" method="get">
             {{ filter_form.as_p }}
-
             <input class="btn btn-success" type="submit" name="submit">
         </form>
     </div>
