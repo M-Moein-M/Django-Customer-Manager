@@ -52,12 +52,12 @@ class ListOrders:
 	orders_per_page = 7
 	def __init__(self, request, page_num):
 		self.filter = FilterOrders(request)
-		p = int(page_num)
-		p = p if p > 0 else 1
-		self.set_first_and_last_index(p)
+		self.set_first_and_last_index(page_num)
 
-	def set_first_and_last_index(self, page):
-		self.first_order = self.orders_per_page * (page - 1)
+	def set_first_and_last_index(self, p):
+		p = int(p)
+		p = p if p > 0 else 1
+		self.first_order = self.orders_per_page * (p - 1)
 		self.last_order = self.first_order + self.orders_per_page
 
 	def get_orders(self):
@@ -69,18 +69,24 @@ class ListOrders:
 
 class FilterOrders:
 	def __init__(self, request):
-		self.request = request
-
 		self.query_dict = request.GET.dict()
-		if not self.query_dict:
-			self.filtered = Order.objects.all()
-		else:
-			prod_name = [x.strip() for x in self.query_dict.get('product_name', '').split(',')]
-			del self.query_dict['product_name']
-			del self.query_dict['submit']
-			if any(prod_name):
-				self.query_dict['product__name__in'] = prod_name
-			self.filtered = Order.objects.filter(**self.query_dict)
+		self.apply_filter()
+
+	def apply_filter(self):
+		query_exists = bool(self.query_dict)
+		if query_exists:
+			self.adjust_query_dict_fields()
+		self.filtered = Order.objects.filter(**self.query_dict)
+
+	def adjust_query_dict_fields(self):
+		self.adjust_query_dict_for_product_name()
+		del self.query_dict['submit']
+
+	def adjust_query_dict_for_product_name(self):
+		prod_name = [x.strip() for x in self.query_dict.get('product_name', '').split(',')]
+		del self.query_dict['product_name']
+		if any(prod_name):
+			self.query_dict['product__name__in'] = prod_name
 
 	def get_filtered_orders(self):
 		return self.filtered
