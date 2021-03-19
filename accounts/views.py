@@ -56,7 +56,7 @@ def loginPage(request):
             login(request, user)
             return redirect('home')
         else:
-            messages.error(request, 'Username or Password is incorrect')
+            messages.error(request, 'Username or Password is Incorrect')
 
     context = {}
     return render(request, 'accounts/login.html', context)
@@ -75,7 +75,7 @@ def registerPage(request):
         if form.is_valid():
             form.save()
 
-            messages.success(request, f'Account Was Created For {form.cleaned_data.get("username")}')
+            messages.success(request, f'Account Was Created for {form.cleaned_data.get("username")}')
 
             return redirect('login')
 
@@ -169,7 +169,7 @@ def customer(request, customer_id):
 def createOrder(request, pk):
     if request.method == 'POST':
         SaveNewOrder(request, pk).save_order()
-        messages.success(request, 'Order successfully saved.')
+        messages.success(request, 'Order Successfully Saved.')
         return redirect('products')
 
     product = Product.objects.get(id=pk)
