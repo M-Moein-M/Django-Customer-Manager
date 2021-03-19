@@ -44,4 +44,4 @@ class NewOrderForm(forms.Form):
 
 class OrderFilterForm(forms.Form):
 	product_name = forms.CharField(max_length=255, required=False)
-	quantity_range = forms.CharField(max_length=31, required=False, label='Quantity range(like 2, 7)')
+	quantity_range = forms.CharField(max_length=31, required=False, label='Quantity range(like 2, 17)')

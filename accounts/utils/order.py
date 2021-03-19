@@ -80,6 +80,7 @@ class FilterOrders:
 
 	def adjust_query_dict_fields(self):
 		ProductNameFilter(self.query_dict).adjust_query_dict()
+		ProductQuantityRangeFilter(self.query_dict).adjust_query_dict()
 		del self.query_dict['submit']
 
 	def get_filtered_orders(self):
@@ -88,12 +89,35 @@ class FilterOrders:
 	def count_pages(self):
 		return math.ceil(len(self.filtered)/ListOrders.orders_per_page)
 
+
 class ProductFieldsFilter:
 	def __init__(self, query_dict):
 		self.query_dict = query_dict
 
+
+class ProductQuantityRangeFilter(ProductFieldsFilter):
+	def __init__(self, query_dict):
+		super().__init__(query_dict)
+
 	def adjust_query_dict(self):
-		pass
+		self.set_quantity_range_in_query()
+		del self.query_dict['quantity_range']
+
+	def set_quantity_range_in_query(self):
+		is_valid = self.validate_and_set_range()
+		if is_valid:
+			self.query_dict['quantity__gte'] = int(self.min_q)
+			self.query_dict['quantity__lte'] = int(self.max_q)
+
+	def validate_and_set_range(self):
+		q_range = [x.strip() for x in self.query_dict.get('quantity_range', '').split(',')]
+		if len(q_range) != 2:
+			return False
+		min_q, max_q = q_range
+		if min_q.isdigit() and max_q.isdigit():
+			self.min_q, self.max_q = min_q, max_q
+			return True
+		return False
 
 
 class ProductNameFilter(ProductFieldsFilter):
