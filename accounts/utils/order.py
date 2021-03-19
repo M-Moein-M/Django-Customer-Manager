@@ -76,7 +76,7 @@ class FilterOrders:
 		query_exists = bool(self.query_dict)
 		if query_exists:
 			self.adjust_query_dict_fields()
-		self.filtered = Order.objects.filter(**self.query_dict)
+		self.filtered = Order.objects.filter(**self.query_dict).order_by('date_created')
 
 	def adjust_query_dict_fields(self):
 		ProductNameFilter(self.query_dict).adjust_query_dict()
