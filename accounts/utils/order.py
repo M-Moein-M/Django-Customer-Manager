@@ -1,5 +1,5 @@
 from ..models import Customer, Product, Order
-from ..forms import NewOrderForm, UpdateOrderForm
+from ..forms import NewOrderForm, UpdateOrderForm, OrderFilterForm
 import math
 
 
@@ -81,6 +81,7 @@ class FilterOrders:
 	def adjust_query_dict_fields(self):
 		ProductNameFilter(self.query_dict).adjust_query_dict()
 		ProductQuantityRangeFilter(self.query_dict).adjust_query_dict()
+		ProductStatusFilter(self.query_dict).adjust_query_dict()
 		del self.query_dict['submit']
 
 	def get_filtered_orders(self):
@@ -93,6 +94,16 @@ class FilterOrders:
 class ProductFieldsFilter:
 	def __init__(self, query_dict):
 		self.query_dict = query_dict
+
+
+class ProductStatusFilter(ProductFieldsFilter):
+	def __init__(self, query_dict):
+		super().__init__(query_dict)
+
+	def adjust_query_dict(self):
+		status = self.query_dict.get('status')
+		if status == OrderFilterForm.status_any:
+			del self.query_dict['status']
 
 
 class ProductQuantityRangeFilter(ProductFieldsFilter):

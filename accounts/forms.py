@@ -45,3 +45,6 @@ class NewOrderForm(forms.Form):
 class OrderFilterForm(forms.Form):
 	product_name = forms.CharField(max_length=255, required=False)
 	quantity_range = forms.CharField(max_length=31, required=False, label='Quantity range(like 2, 17)')
+	status_any = 'Any'
+	status_choices = tuple(list(Order.STATUS)+[(status_any, 'Any')])
+	status = forms.ChoiceField(choices=status_choices, required=False, initial=status_any)
