@@ -79,17 +79,29 @@ class FilterOrders:
 		self.filtered = Order.objects.filter(**self.query_dict)
 
 	def adjust_query_dict_fields(self):
-		self.adjust_query_dict_for_product_name()
+		ProductNameFilter(self.query_dict).adjust_query_dict()
 		del self.query_dict['submit']
-
-	def adjust_query_dict_for_product_name(self):
-		prod_name = [x.strip() for x in self.query_dict.get('product_name', '').split(',')]
-		del self.query_dict['product_name']
-		if any(prod_name):
-			self.query_dict['product__name__in'] = prod_name
 
 	def get_filtered_orders(self):
 		return self.filtered
 
 	def count_pages(self):
 		return math.ceil(len(self.filtered)/ListOrders.orders_per_page)
+
+class ProductFieldsFilter:
+	def __init__(self, query_dict):
+		self.query_dict = query_dict
+
+	def adjust_query_dict(self):
+		pass
+
+
+class ProductNameFilter(ProductFieldsFilter):
+	def __init__(self, query_dict):
+		super().__init__(query_dict)
+
+	def adjust_query_dict(self):
+		prod_name = [x.strip() for x in self.query_dict.get('product_name', '').split(',')]
+		del self.query_dict['product_name']
+		if any(prod_name):
+			self.query_dict['product__name__in'] = prod_name
