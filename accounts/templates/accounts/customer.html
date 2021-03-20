@@ -47,8 +47,9 @@
                     <th>Category</th>
                     <th>Date Ordered</th>
                     <th>Status</th>
-                    <th>Update</th>
-                    <th>Remove</th>
+                    {% if not user.is_staff %}
+                    <th></th>
+                    {% endif %}
                 </tr>
 
                 {% for order in orders %}
@@ -57,8 +58,9 @@
                         <td>{{order.product.category}}</td>
                         <td>{{order.date_created}}</td>
                         <td>{{order.status}}</td>
-                        <td><a class="btn btn-secondary  btn-sm btn-block" href="{% url 'update_order' order.id %}">Update</a></td>
+                        {% if not user.is_staff %}
                         <td><a class="btn btn-danger  btn-sm btn-block" href="{% url 'delete_order' order.id %}">Delete</a></td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
 
