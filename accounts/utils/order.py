@@ -140,3 +140,24 @@ class ProductNameFilter(ProductFieldsFilter):
 		del self.query_dict['product_name']
 		if any(prod_name):
 			self.query_dict['product__name__in'] = prod_name
+
+
+class OrderDeleter:
+	def __init__(self, order, status_condition='Pending'):
+		self.order = order
+		self.condition = status_condition
+
+	def delete_order(self):
+		if self.order.status == self.condition:
+			self.order.delete()
+			self.msg = 'Order Successfully Deleted'
+			self.status = 'success'
+		else:
+			self.msg = f"You Can Delete Order If Only It's {self.condition}"
+			self.status = 'error'
+
+	def get_delete_status(self):
+		return {
+			'msg': self.msg,
+			'status': self.status,
+		}
