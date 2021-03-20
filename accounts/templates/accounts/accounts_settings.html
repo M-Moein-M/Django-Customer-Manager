@@ -1,51 +1,34 @@
 {%  extends 'accounts/main.html' %}
-{% load static %}
 {% block content %}
 
-<style>
-	.profile-pic{
-		max-width: 200px;
-		max-height:200px;
-		margin: 0 auto;
-		border-radius: 50%;
-	}
-</style>
-
-<br>
 <div class="row m-1">
-	<div class="col-md-3">
-		<div class="card card-body">
-			<a class="btn btn-warning" href="{% url 'home' %}"> &#8592; Back to Profile</a>
-			<hr>
-			<h3 style="text-align: center">Account Settings</h3>
-			<hr>
-			<img class="profile-pic" src="{{request.user.customer.profile_pic}}" >
-		
-		</div>
-	</div>
-	<div class="col-md-6">
-		<div class="card card-body">
-			
-			<form method="POST" action="" enctype="multipart/form-data">
-				{% csrf_token %}
-				{{info_form.as_p}}
-		
-			<input class="btn btn-primary" type="submit" name="Update Information">
-			</form>
+    <div class="col-md-4">
+        <a class="btn btn-warning" href="{% url 'home' %}" style="display:block;"> &#8592; Back to Dashboard</a>
+        <hr>
+        <h3 style="text-align: center">Account Settings</h3>
+        <hr>
+        <img id="profile-pic" src="{{request.user.customer.profile_pic}}">
+    </div>
+    <div class="col-md-8">
 
-			<hr>
+        <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{info_form.as_p}}
 
-			<form method="POST" action="" enctype="multipart/form-data">
-				{% csrf_token %}
-				<h6>Choose a picture to change your profile picture</h6>
-				{{profile_pic_form.as_p}}
+            <input class="btn btn-primary" type="submit" name="Update Information">
+        </form>
 
-			<input class="btn btn-primary" type="submit" name="Update Information">
-			</form>
-		</div>
-	</div>
+        <hr>
+
+        <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h6>Choose a picture to change your profile picture</h6>
+            {{profile_pic_form.as_p}}
+
+            <input class="btn btn-primary" type="submit" name="Update Information">
+        </form>
+    </div>
 </div>
-
 
 
 {% endblock %}
