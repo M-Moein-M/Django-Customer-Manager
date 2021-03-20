@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .utils.account import is_user_authorized_to_visit_page, SaveCustomerSettings
 from .utils.product import SaveNewProduct
-from .utils.order import SaveNewOrder, UpdateOrder, ListOrders
+from .utils.order import SaveNewOrder, UpdateOrder, ListOrders, OrderDeleter
 from .forms import *
 from .filters import OrderFilter
 from django.contrib import messages
@@ -197,13 +197,24 @@ def updateOrder(request, pk):
 
 
 @login_required(login_url='login')
-@allowed_user(allowed_roles=['admin'])
+@allowed_user(allowed_roles=['customer'])
 def deleteOrder(request, pk):
     order = Order.objects.get(id=pk)
+    authorized = is_user_authorized_to_visit_page(request.user, order.customer.id)
+    if not authorized:
+        messages.error(request, "You're Not Authorized to Change This Order")
+        return redirect('customer', customer_id=request.user.id)
 
     if request.method == 'POST':
-        order.delete()
-        return redirect('/')
+        deleter = OrderDeleter(order)
+        deleter.delete_order()
+        status = deleter.get_delete_status()
+        if status['status'] == 'success':
+            messages.success(request, status['msg'])
+            return redirect('customer', customer_id=request.user.id)
+        else:
+            messages.error(request, status['msg'])
+            return redirect('customer', customer_id=request.user.id)
 
     context = {'item': order}
     return render(request, 'accounts/delete_order.html', context)
