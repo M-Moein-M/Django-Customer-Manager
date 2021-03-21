@@ -25,21 +25,16 @@
 
 <br>
 <div class="row">
-    <div class="col">
-        <div class="card card-body">
-            <form method="get">
-                {{myFilter.form}}
-
-                <button class="btn btn-primary" type="submit">Search</button>
-            </form>
-        </div>
+    <div class="col-sm-3">
+        <form method="get">
+            {{ filter_form.as_p }}
+            <input class="btn btn-success" type="submit" name="submit">
+        </form>
     </div>
 
-</div>
-<br>
+    <br>
 
-<div class="row">
-    <div class="col-md">
+    <div class="col-sm-9">
         <div class="card card-body">
             <table class="table table-sm">
                 <tr>
@@ -53,18 +48,27 @@
                 </tr>
 
                 {% for order in orders %}
-                    <tr>
-                        <td>{{order}}</td>
-                        <td>{{order.product.category}}</td>
-                        <td>{{order.date_created}}</td>
-                        <td>{{order.status}}</td>
-                        {% if not user.is_staff %}
-                        <td><a class="btn btn-danger  btn-sm btn-block" href="{% url 'delete_order' order.id %}">Delete</a></td>
-                        {% endif %}
-                    </tr>
+                <tr>
+                    <td>{{order}}</td>
+                    <td>{{order.product.category}}</td>
+                    <td>{{order.date_created}}</td>
+                    <td>{{order.status}}</td>
+                    {% if not user.is_staff %}
+                    <td><a class="btn btn-danger  btn-sm btn-block" href="{% url 'delete_order' order.id %}">Delete</a>
+                    </td>
+                    {% endif %}
+                </tr>
                 {% endfor %}
 
             </table>
+        </div>
+
+        <div class="row justify-content-center m-1">
+            <p class="text-center">
+                <a class="btn btn-secondary btn-sm mx-5" href="{% url 'customer' request.user.customer.id prev_page %}">Previous</a>
+                Page: <strong>{{page}}</strong> of {{pages_count}}
+                <a class="btn btn-secondary btn-sm mx-5" href="{% url 'customer' request.user.customer.id next_page %}">Next</a>
+            </p>
         </div>
     </div>
 </div>

@@ -29,7 +29,7 @@
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'customer' request.user.customer.id %}">Orders</a>
+                    <a class="nav-link" href="{% url 'customer' request.user.customer.id 1 %}">Orders</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'account_settings' %}">Settings</a>
