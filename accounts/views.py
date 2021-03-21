@@ -3,7 +3,6 @@ from .utils.account import is_user_authorized_to_visit_page, SaveCustomerSetting
 from .utils.product import SaveNewProduct
 from .utils.order import SaveNewOrder, UpdateOrder, ListOrders, OrderDeleter
 from .forms import *
-from .filters import OrderFilter
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -143,7 +142,7 @@ def newProduct(request):
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'customer'])
-def customer(request, customer_id):
+def customer(request, customer_id, page):
     authorized = is_user_authorized_to_visit_page(request.user, customer_id)
     if not authorized:
         return redirect('/')
@@ -152,13 +151,18 @@ def customer(request, customer_id):
     orders = customer.order_set.all()
     orders_count = orders.count()
 
-    myFilter = OrderFilter(request.GET, queryset=orders)
-    orders = myFilter.qs
+    page = int(page)
+    lister = ListOrders(request, page)
+    orders = lister.get_orders()
+    filter_form = OrderFilterForm(initial=request.GET)
 
     context = {'customer': customer,
                'orders': orders,
                'orders_count': orders_count,
-               'myFilter': myFilter
+               'filter_form': filter_form,
+               'next_page': page + 1,
+               'prev_page': page - 1,
+               'pages_count': lister.count_pages(),
                }
 
     return render(request, 'accounts/customer.html', context)
