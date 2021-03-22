@@ -27,6 +27,7 @@
                     <div class="btn-group" style="width:100%">
                         {% if request.user.is_staff %}
                         <a class="btn btn-outline-dark m-1 btn-block" href="{% url 'edit_product' i.id %}">Edit Product</a>
+                        <a class="btn btn-outline-danger m-1 btn-block" href="{% url 'delete_product' i.id %}">Delete Product</a>
                         {% else %}
                         <a class="btn btn-outline-dark m-1 btn-block" href="{% url 'create_order' i.id %}">Place Order</a>
                         {% endif %}
