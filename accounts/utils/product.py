@@ -1,5 +1,5 @@
 from ..forms import NewProductForm
-from ..models import Tag
+from ..models import Tag, Product
 from .img_file_upload import ImgFieldUpload
 
 
@@ -72,3 +72,11 @@ class ProductTag:
 		new_tag = Tag(name=self.name)
 		new_tag.save()
 		return new_tag
+
+
+class ProductDeleter:
+	def __init__(self, pk):
+		self.pk = pk
+
+	def delete_product(self):
+		Product.objects.filter(id=self.pk).delete()
