@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .utils.account import is_user_authorized_to_visit_page, SaveCustomerSettings
-from .utils.product import SaveNewProduct
+from .utils.product import SaveNewProduct, ProductDeleter
 from .utils.order import SaveNewOrder, UpdateOrder, ListOrders, OrderDeleter
 from .forms import *
 from django.contrib import messages
@@ -138,6 +138,22 @@ def newProduct(request):
     prodForm = NewProductForm()
     context = {'prodForm': prodForm}
     return render(request, 'accounts/new_product.html', context)
+
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin'])
+def deleteProduct(request, pk):
+    if request.method == 'POST':
+        ProductDeleter(pk).delete_product()
+        messages.success(request, 'Product Successfully Deleted')
+        return redirect('products')
+    product = Product.objects.get(id=pk)
+    related_orders = Order.objects.filter(product__id=pk)
+    context = {'related_orders': related_orders,
+               'product_name': product.name,
+               'orders': related_orders,
+               'product_pic': product.product_pic}
+    return render(request, 'accounts/product_delete.html', context)
 
 
 @login_required(login_url='login')

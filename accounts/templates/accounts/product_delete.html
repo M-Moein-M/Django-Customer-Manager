@@ -1,0 +1,56 @@
+{% extends 'accounts/main.html' %}
+
+{% load static %}
+{% block content %}
+
+<h3>Delete Product</h3>
+
+<div class="row justify-content-center m-1">
+    <div class="col-md-6">
+        <div style="background-image:url('{{product_pic}}'); height: 300px; width: auto;background-position: 50% 50%;
+                        background-repeat: no-repeat;
+                        background-size: cover;">
+        </div>
+        <div class="card-body">
+            <p>Removing <strong>{{ product_name }}</strong> will delete <strong>all orders below</strong>. Do you want
+                to proceed?</p>
+            <form action="" method="post">
+                {% csrf_token %}
+
+                <input class="btn btn-success" type="submit" name="submit">
+                <a class="btn btn-danger" href="{% url 'products'%}">Cancel</a>
+
+            </form>
+        </div>
+    </div>
+</div>
+<div class="row justify-content-center m-1">
+    {% if not orders %}
+    <p><b>There's no order related to this product.</b></p>
+    {% else %}
+    <div class="card card-body">
+        <table class="table table-sm">
+            <tr>
+                <th>Product</th>
+                <th>Date Ordered</th>
+                <th>Status</th>
+                <th>Update</th>
+            </tr>
+
+            {% for order in orders %}
+            <tr>
+                <td>{{order}}</td>
+                <td>{{order.date_created}}</td>
+                <td>{{order.status}}</td>
+                <td><a class="btn btn-secondary  btn-sm btn-block"
+                       href="{% url 'update_order' order.id %}">Update</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}
