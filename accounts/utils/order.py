@@ -79,9 +79,9 @@ class FilterOrders:
 		self.filtered = Order.objects.filter(**self.query_dict).order_by('date_created')
 
 	def adjust_query_dict_fields(self):
-		ProductNameFilter(self.query_dict).adjust_query_dict()
-		ProductQuantityRangeFilter(self.query_dict).adjust_query_dict()
-		ProductStatusFilter(self.query_dict).adjust_query_dict()
+		OrderProductNameFilter(self.query_dict).adjust_query_dict()
+		OrderQuantityRangeFilter(self.query_dict).adjust_query_dict()
+		OrderStatusFilter(self.query_dict).adjust_query_dict()
 		del self.query_dict['submit']
 
 	def get_filtered_orders(self):
@@ -91,12 +91,12 @@ class FilterOrders:
 		return math.ceil(len(self.filtered)/ListOrders.orders_per_page)
 
 
-class ProductFieldsFilter:
+class OrderFieldsFilter:
 	def __init__(self, query_dict):
 		self.query_dict = query_dict
 
 
-class ProductStatusFilter(ProductFieldsFilter):
+class OrderStatusFilter(OrderFieldsFilter):
 	def __init__(self, query_dict):
 		super().__init__(query_dict)
 
@@ -106,7 +106,7 @@ class ProductStatusFilter(ProductFieldsFilter):
 			del self.query_dict['status']
 
 
-class ProductQuantityRangeFilter(ProductFieldsFilter):
+class OrderQuantityRangeFilter(OrderFieldsFilter):
 	def __init__(self, query_dict):
 		super().__init__(query_dict)
 
@@ -131,7 +131,7 @@ class ProductQuantityRangeFilter(ProductFieldsFilter):
 		return False
 
 
-class ProductNameFilter(ProductFieldsFilter):
+class OrderProductNameFilter(OrderFieldsFilter):
 	def __init__(self, query_dict):
 		super().__init__(query_dict)
 
