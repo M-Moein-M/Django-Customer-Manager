@@ -48,7 +48,7 @@ class Order(models.Model):
 	)
 
 	customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
-	product = models.ForeignKey(Product, null=True, on_delete=models.SET_NULL)
+	product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
 	status = models.CharField(max_length=100, choices=STATUS)
 	quantity = models.IntegerField(default=1)
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
