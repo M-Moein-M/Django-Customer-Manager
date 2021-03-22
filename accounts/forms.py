@@ -1,3 +1,4 @@
+import datetime
 from django.forms import ModelForm
 from .models import *
 from django.contrib.auth.forms import UserCreationForm
@@ -48,3 +49,5 @@ class OrderFilterForm(forms.Form):
 	status_any = 'Any'
 	status_choices = tuple(list(Order.STATUS)+[(status_any, 'Any')])
 	status = forms.ChoiceField(choices=status_choices, required=False, initial=status_any)
+	date_created_initial = forms.DateField(initial=datetime.date(2020, 1, 1))
+	date_created_final = forms.DateField(initial=datetime.date.today()+datetime.timedelta(days=1))

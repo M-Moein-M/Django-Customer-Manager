@@ -142,6 +142,21 @@ class OrderProductNameFilter(OrderFieldsFilter):
 			self.query_dict['product__name__in'] = prod_name
 
 
+class OrderDateCreatedFilter(OrderFieldsFilter):
+	def __init__(self, query_dict):
+		super().__init__(query_dict)
+
+	def adjust_query_dict(self):
+		self.set_query_for_max_date_created()
+		self.set_query_for_min_date_created()
+
+	def set_query_for_min_date_created(self):
+		pass
+
+	def set_query_for_max_date_created(self):
+		pass
+
+
 class OrderDeleter:
 	def __init__(self, order, status_condition='Pending'):
 		self.order = order
