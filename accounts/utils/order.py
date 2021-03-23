@@ -1,6 +1,7 @@
 from ..models import Customer, Product, Order
 from ..forms import NewOrderForm, UpdateOrderForm, OrderFilterForm
 import math
+import datetime, pytz
 
 
 class SaveNewOrder:
@@ -82,6 +83,7 @@ class FilterOrders:
 		OrderProductNameFilter(self.query_dict).adjust_query_dict()
 		OrderQuantityRangeFilter(self.query_dict).adjust_query_dict()
 		OrderStatusFilter(self.query_dict).adjust_query_dict()
+		OrderDateCreatedFilter(self.query_dict).adjust_query_dict()
 		del self.query_dict['submit']
 
 	def get_filtered_orders(self):
@@ -147,15 +149,23 @@ class OrderDateCreatedFilter(OrderFieldsFilter):
 		super().__init__(query_dict)
 
 	def adjust_query_dict(self):
-		self.set_query_for_max_date_created()
-		self.set_query_for_min_date_created()
+		self.set_query_for_initial_date_created()
+		self.set_query_for_final_date_created()
+		del self.query_dict['date_created_initial']
+		del self.query_dict['date_created_final']
 
-	def set_query_for_min_date_created(self):
-		pass
+	def set_query_for_initial_date_created(self):
+		date_initial = self.get_time_object(self.query_dict['date_created_initial'])
+		self.query_dict['date_created__gte'] = date_initial
 
-	def set_query_for_max_date_created(self):
-		pass
+	def set_query_for_final_date_created(self):
+		date_final = self.get_time_object(self.query_dict['date_created_final'])
+		self.query_dict['date_created_final'] = date_final
 
+	def get_time_object(self, date_str):
+		date = [int(d.strip()) for d in date_str.split('-')]
+		year, month, day = date
+		return datetime.datetime(year, month, day, tzinfo=pytz.UTC)
 
 class OrderDeleter:
 	def __init__(self, order, status_condition='Pending'):

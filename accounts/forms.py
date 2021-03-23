@@ -4,7 +4,7 @@ from .models import *
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.contrib.auth.models import User
-
+import pytz
 
 class UpdateOrderForm(ModelForm):
 	class Meta:
@@ -49,5 +49,6 @@ class OrderFilterForm(forms.Form):
 	status_any = 'Any'
 	status_choices = tuple(list(Order.STATUS)+[(status_any, 'Any')])
 	status = forms.ChoiceField(choices=status_choices, required=False, initial=status_any)
-	date_created_initial = forms.DateField(initial=datetime.date(2020, 1, 1))
-	date_created_final = forms.DateField(initial=datetime.date.today()+datetime.timedelta(days=1))
+	date_created_initial = forms.DateField(initial=datetime.datetime(2020, 1, 1, tzinfo=pytz.UTC))
+	final_d = datetime.date.today()+datetime.timedelta(days=1)
+	date_created_final = forms.DateField(initial=datetime.datetime(final_d.year, final_d.month, final_d.day, tzinfo=pytz.UTC))
