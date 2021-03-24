@@ -91,13 +91,23 @@ with open(Path(__file__).parent / 'cred.txt', 'r') as f:
     ENV_CONFIG.update(json.loads(f.read()))
 
 DATABASES = {
+    # elephantSQL database config
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': ENV_CONFIG['DB_NAME'],
+    #     'USER': ENV_CONFIG['DB_USER'],
+    #     'PASSWORD': ENV_CONFIG['DB_PASSWORD'],
+    #     'HOST': ENV_CONFIG['DB_HOST'],
+    #     'PORT': ENV_CONFIG['DB_PORT'],
+    # }
+
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': ENV_CONFIG['DB_NAME'],
-        'USER': ENV_CONFIG['DB_USER'],
-        'PASSWORD': ENV_CONFIG['DB_PASSWORD'],
-        'HOST': ENV_CONFIG['DB_HOST'],
-        'PORT': ENV_CONFIG['DB_PORT'],
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'djangodb',
+        'USER': 'postgres',
+        'PASSWORD': ENV_CONFIG['LOCAL_DB_PASS'],
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
