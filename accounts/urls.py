@@ -21,7 +21,7 @@ urlpatterns = [
     path('login', views.loginPage, name='login'),
     path('logout', views.logoutUser, name='logout'),
 
-    path('admin_page', views.adminPage, name='admin_page'),
+    path('admin_page/', views.adminPage, name='admin_page'),
 
     path('account', views.accountSettings, name='account_settings'),
 

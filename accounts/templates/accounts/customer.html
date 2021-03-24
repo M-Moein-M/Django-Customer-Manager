@@ -35,6 +35,8 @@
     <br>
 
     <div class="col-sm-9">
+        {% if orders %}
+
         <div class="card card-body">
             <table class="table table-sm">
                 <tr>
@@ -46,7 +48,6 @@
                     <th></th>
                     {% endif %}
                 </tr>
-
                 {% for order in orders %}
                 <tr>
                     <td>{{order}}</td>
@@ -59,7 +60,6 @@
                     {% endif %}
                 </tr>
                 {% endfor %}
-
             </table>
         </div>
 
@@ -70,6 +70,8 @@
                 <a class="btn btn-secondary btn-sm mx-5" href="{% url 'customer' request.user.customer.id next_page %}">Next</a>
             </p>
         </div>
+        {% endif %}
+
     </div>
 </div>
 {% endblock %}
