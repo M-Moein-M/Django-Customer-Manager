@@ -8,6 +8,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .decorators import unauthenticated_user, allowed_user
 
+@login_required(login_url='login')
+def redirectHome(request):
+    group = request.user.groups.all()[0].name
+    if group == 'admin':
+        return redirect('admin_page')
+    elif group == 'customer':
+        return redirect('customer_page')
+
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['customer'])
