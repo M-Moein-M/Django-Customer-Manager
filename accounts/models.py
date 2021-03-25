@@ -28,6 +28,12 @@ class Product(models.Model):
 		('Out Door', 'Out Door'),
 	)
 
+	AVAILABILITY = (
+		('Available', 'Available'),
+		('Not Available', 'Not Available'),
+		('Pending Admin Confirmation', 'Pending Admin Confirmation')
+	)
+
 	name = models.CharField(max_length=100, null=True)
 	price = models.FloatField(null=True)
 	category = models.CharField(max_length=100, null=True, choices=CATEGORY)
@@ -35,6 +41,7 @@ class Product(models.Model):
 	date_created = models.DateTimeField(auto_now_add=True, null=True)
 	tags = models.ManyToManyField(Tag)
 	product_pic = models.CharField(max_length=250, default='https://i.ibb.co/6nTkL30/Unknown-Product.png')
+	availability = models.CharField(max_length=63, choices=AVAILABILITY, default='Not Available')
 
 	def __str__(self):
 		return self.name
