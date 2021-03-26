@@ -42,4 +42,9 @@ class SaveNewOrder:
 class ListOrdersCustomer(ListOrders):
 	def __init__(self, request, page_num, customer_id):
 		super().__init__(request, page_num)
-		self.customer_id = customer_id
+		self.customer_id = int(customer_id)
+
+	def get_orders(self):
+		orders = self.filter.get_filtered_orders()
+		customer_orders = filter(lambda order: str(order.customer.id)==str(self.customer_id),orders)
+		return list(customer_orders)[self.first_order: self.last_order]
