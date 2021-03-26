@@ -180,7 +180,6 @@ def customer(request, customer_id, page):
     orders = customer.order_set.all()
     orders_count = orders.count()
 
-
     page = int(page)
     lister = ListOrdersCustomer(request, page, customer_id)
     orders = lister.get_orders()
