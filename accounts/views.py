@@ -1,7 +1,12 @@
 from django.shortcuts import render, redirect
-from .utils.account import is_user_authorized_to_visit_page, SaveCustomerSettings
+from .utils.account import is_user_authorized_to_visit_page
+from accounts.utils.customer.account import SaveCustomerSettings
 from .utils.product import SaveNewProduct, ProductDeleter
-from .utils.order import SaveNewOrder, UpdateOrder, ListOrders, OrderDeleter
+from .utils.order import ListOrders, OrderDeleter
+from accounts.utils.admin.order import UpdateOrder
+from accounts.utils.customer.order import SaveNewOrder
+from accounts.utils.admin.order import ListOrdersAdmin
+from accounts.utils.customer.order import ListOrdersCustomer
 from .forms import *
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -176,7 +181,7 @@ def customer(request, customer_id, page):
     orders_count = orders.count()
 
     page = int(page)
-    lister = ListOrders(request, page)
+    lister = ListOrdersCustomer(request, page, customer_id)
     orders = lister.get_orders()
     filter_form = OrderFilterForm(initial=request.GET)
 
@@ -252,7 +257,7 @@ def deleteOrder(request, pk):
 @allowed_user(allowed_roles=['admin'])
 def showOrders(request, page):
     page = int(page)
-    lister = ListOrders(request, page)
+    lister = ListOrdersAdmin(request, page)
     orders = lister.get_orders()
     filter_form = OrderFilterForm(initial=request.GET)
     context = {'orders': orders,
