@@ -126,9 +126,21 @@ def adminPage(request):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin', 'customer'])
 def products(request):
+    return redirect_groups(request, if_admin='admin_products', if_customer='customer_products')
+
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin'])
+def adminProducts(request):
     products = Product.objects.all()
     return render(request, 'accounts/products.html', {'products': products})
 
+
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['customer'])
+def customerProducts(request):
+    products = Product.objects.all()
+    return render(request, 'accounts/products.html', {'products': products})
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin'])
