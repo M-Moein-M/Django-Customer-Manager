@@ -17,6 +17,9 @@
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
+                    {% if show_availability %}
+                    <span class="badge bg-warning text-white">{{i.availability}}</span>
+                    {% endif %}
                     <span class="badge bg-info text-white">{{i.category}}</span>
                     {% for t in i.tags.all %}
                         <span class="badge bg-secondary text-white">{{t.name}}</span>
