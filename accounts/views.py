@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect
 from .utils.account import is_user_authorized_to_visit_page
 from accounts.utils.customer.account import SaveCustomerSettings
 from .utils.product import SaveNewProduct, ProductDeleter
-from .utils.order import ListOrders, OrderDeleter
+from .utils.order import OrderDeleter
 from accounts.utils.admin.order import UpdateOrder
 from accounts.utils.customer.order import SaveNewOrder
 from accounts.utils.admin.order import ListOrdersAdmin
 from accounts.utils.customer.order import ListOrdersCustomer
+from accounts.utils.customer.product import ProductListCustomer
 from .forms import *
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -139,7 +140,7 @@ def adminProducts(request):
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['customer'])
 def customerProducts(request):
-    products = Product.objects.all()
+    products = ProductListCustomer().get_product_list()
     return render(request, 'accounts/products.html', {'products': products})
 
 @login_required(login_url='login')
