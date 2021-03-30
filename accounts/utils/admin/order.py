@@ -2,7 +2,7 @@ from accounts.forms import UpdateOrderForm
 from ..order import ListOrders
 
 
-class UpdateOrder:
+class OrderUpdate:
 	def __init__(self, request, order_instance):
 		self.request = request
 		self.instance = order_instance
@@ -13,6 +13,6 @@ class UpdateOrder:
 			form.save()
 
 
-class ListOrdersAdmin(ListOrders):
+class OrdersListAdmin(ListOrders):
 	def __init__(self, request, page_num):
 		super().__init__(request, page_num)

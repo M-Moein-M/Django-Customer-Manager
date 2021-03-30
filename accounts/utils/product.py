@@ -1,6 +1,6 @@
 from ..forms import NewProductForm
 from ..models import Tag, Product
-from .img_file_upload import ImgFieldUpload
+from .img_file_upload import ImgFieldUploader
 
 
 class SaveNewProduct:
@@ -18,13 +18,13 @@ class SaveNewProduct:
 	def save_new_product(self):
 		self.product = self.prod_form.save()
 		self.save_product_pic_to_host()
-		SaveProductTags(self.product, self.prod_form).save_tags()
+		NewProductTagsManager(self.product, self.prod_form).save_tags()
 
 	def save_product_pic_to_host(self):
-		ImgFieldUpload(self.request.FILES, 'product_pic', self.product).save_pic()
+		ImgFieldUploader(self.request.FILES, 'product_pic', self.product).save_pic()
 
 
-class SaveProductTags:
+class NewProductTagsManager:
 	def __init__(self, product, product_form):
 		self.product = product
 		self.product_form = product_form

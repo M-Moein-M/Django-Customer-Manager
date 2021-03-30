@@ -7,7 +7,7 @@ import datetime, pytz
 class ListOrders:
 	orders_per_page = 7
 	def __init__(self, request, page_num):
-		self.filter = FilterOrders(request)
+		self.filter = OrdersFilter(request)
 		self.set_first_and_last_index(page_num)
 
 	def set_first_and_last_index(self, p):
@@ -23,7 +23,7 @@ class ListOrders:
 		return self.filter.count_pages()
 
 
-class FilterOrders:
+class OrdersFilter:
 	def __init__(self, request):
 		self.query_dict = request.GET.dict()
 		self.apply_filter()
@@ -35,10 +35,10 @@ class FilterOrders:
 		self.filtered = Order.objects.filter(**self.query_dict).order_by('date_created')
 
 	def adjust_query_dict_fields(self):
-		OrderProductNameFilter(self.query_dict).adjust_query_dict()
-		OrderQuantityRangeFilter(self.query_dict).adjust_query_dict()
-		OrderStatusFilter(self.query_dict).adjust_query_dict()
-		OrderDateCreatedFilter(self.query_dict).adjust_query_dict()
+		OrderProductNameFilterField(self.query_dict).adjust_query_dict()
+		OrderQuantityRangeFilterField(self.query_dict).adjust_query_dict()
+		OrderStatusFilterField(self.query_dict).adjust_query_dict()
+		OrderDateCreatedFilterField(self.query_dict).adjust_query_dict()
 		del self.query_dict['submit']
 
 	def get_filtered_orders(self):
@@ -48,12 +48,12 @@ class FilterOrders:
 		return math.ceil(len(self.filtered)/ListOrders.orders_per_page)
 
 
-class OrderFieldsFilter:
+class OrderFilterField:
 	def __init__(self, query_dict):
 		self.query_dict = query_dict
 
 
-class OrderStatusFilter(OrderFieldsFilter):
+class OrderStatusFilterField(OrderFilterField):
 	def __init__(self, query_dict):
 		super().__init__(query_dict)
 
@@ -63,7 +63,7 @@ class OrderStatusFilter(OrderFieldsFilter):
 			del self.query_dict['status']
 
 
-class OrderQuantityRangeFilter(OrderFieldsFilter):
+class OrderQuantityRangeFilterField(OrderFilterField):
 	def __init__(self, query_dict):
 		super().__init__(query_dict)
 
@@ -88,7 +88,7 @@ class OrderQuantityRangeFilter(OrderFieldsFilter):
 		return False
 
 
-class OrderProductNameFilter(OrderFieldsFilter):
+class OrderProductNameFilterField(OrderFilterField):
 	def __init__(self, query_dict):
 		super().__init__(query_dict)
 
@@ -99,7 +99,7 @@ class OrderProductNameFilter(OrderFieldsFilter):
 			self.query_dict['product__name__in'] = prod_name
 
 
-class OrderDateCreatedFilter(OrderFieldsFilter):
+class OrderDateCreatedFilterField(OrderFilterField):
 	def __init__(self, query_dict):
 		super().__init__(query_dict)
 
@@ -121,6 +121,7 @@ class OrderDateCreatedFilter(OrderFieldsFilter):
 		date = [int(d.strip()) for d in date_str.split('-')]
 		year, month, day = date
 		return datetime.datetime(year, month, day, tzinfo=pytz.UTC)
+
 
 class OrderDeleter:
 	def __init__(self, order, status_condition='Pending'):

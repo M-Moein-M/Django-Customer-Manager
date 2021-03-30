@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from .utils.account import is_user_authorized_to_visit_page
-from accounts.utils.customer.account import SaveCustomerSettings
+from accounts.utils.customer.account import CustomerSettings
 from .utils.product import SaveNewProduct, ProductDeleter
 from .utils.order import OrderDeleter
-from accounts.utils.admin.order import UpdateOrder, ListOrdersAdmin
+from accounts.utils.admin.order import OrderUpdate, OrdersListAdmin
 from accounts.utils.admin.product import ProductListAdmin
-from accounts.utils.customer.order import SaveNewOrder, ListOrdersCustomer
+from accounts.utils.customer.order import NewOrderCustomer, OrdersListCustomer
 from accounts.utils.customer.product import ProductListCustomer
 from .forms import *
 from django.contrib import messages
@@ -31,7 +31,7 @@ def redirectHome(request):
 @allowed_user(allowed_roles=['customer'])
 def accountSettings(request):
     if request.method == 'POST':
-        SaveCustomerSettings(request).save_settings()
+        CustomerSettings(request).save_settings()
         messages.success(request, 'Account Settings Saved')
     customer = request.user.customer
     form_initial = {'name':customer.name,
@@ -200,7 +200,7 @@ def customer(request, customer_id, page):
     orders_count = orders.count()
 
     page = int(page)
-    lister = ListOrdersCustomer(request, page, customer_id)
+    lister = OrdersListCustomer(request, page, customer_id)
     orders = lister.get_orders()
     filter_form = OrderFilterForm(initial=request.GET)
 
@@ -220,7 +220,7 @@ def customer(request, customer_id, page):
 @allowed_user(allowed_roles=['customer'])
 def createOrder(request, pk):
     if request.method == 'POST':
-        SaveNewOrder(request, pk).save_order()
+        NewOrderCustomer(request, pk).save_order()
         messages.success(request, 'Order Successfully Saved.')
         return redirect('products')
 
@@ -238,7 +238,7 @@ def updateOrder(request, pk):
     order = Order.objects.get(id=pk)
     form = UpdateOrderForm(instance=order)
     if request.method == 'POST':
-        UpdateOrder(request, order).update_order()
+        OrderUpdate(request, order).update_order()
         messages.success(request, 'Order Successfully Updated')
         return redirect('admin_page')
 
@@ -276,7 +276,7 @@ def deleteOrder(request, pk):
 @allowed_user(allowed_roles=['admin'])
 def showOrders(request, page):
     page = int(page)
-    lister = ListOrdersAdmin(request, page)
+    lister = OrdersListAdmin(request, page)
     orders = lister.get_orders()
     filter_form = OrderFilterForm(initial=request.GET)
     context = {'orders': orders,

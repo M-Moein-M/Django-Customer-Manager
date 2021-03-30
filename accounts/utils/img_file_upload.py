@@ -4,7 +4,7 @@ import requests
 import base64
 
 
-class ImgFieldUpload:
+class ImgFieldUploader:
 	def __init__(self, request_files, model_field_name, instance):
 		self.request_files = request_files
 		self.model_field_name = model_field_name

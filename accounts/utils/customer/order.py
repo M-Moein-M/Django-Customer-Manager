@@ -3,7 +3,7 @@ from accounts.models import Customer, Product, Order
 from ..order import ListOrders
 
 
-class SaveNewOrder:
+class NewOrderCustomer:
 	def __init__(self, request, pk):
 		customer_id = request.user.customer.id
 		self.quantity = self.get_order_quantity_from_form_data(request)
@@ -39,7 +39,7 @@ class SaveNewOrder:
 					 quantity=self.quantity)
 
 
-class ListOrdersCustomer(ListOrders):
+class OrdersListCustomer(ListOrders):
 	def __init__(self, request, page_num, customer_id):
 		super().__init__(request, page_num)
 		self.customer_id = int(customer_id)

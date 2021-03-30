@@ -1,8 +1,8 @@
 from accounts.forms import CustomerForm
-from accounts.utils.img_file_upload import ImgFieldUpload
+from accounts.utils.img_file_upload import ImgFieldUploader
 
 
-class SaveCustomerSettings:
+class CustomerSettings:
 	def __init__(self, request):
 		self.request = request
 
@@ -17,7 +17,7 @@ class SaveCustomerSettings:
 			self.save_customer_info_data(info)
 
 	def save_image_settings(self):
-		ImgFieldUpload(self.request.FILES, 'profile_pic', self.customer).save_pic()
+		ImgFieldUploader(self.request.FILES, 'profile_pic', self.customer).save_pic()
 
 	def save_customer_info_data(self, info):
 		customer = info.save()
