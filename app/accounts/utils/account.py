@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User, Group
 
 
 def is_user_authorized_to_visit_page(req_user, authorized_id):
@@ -7,8 +6,3 @@ def is_user_authorized_to_visit_page(req_user, authorized_id):
 	else:
 		return str(req_user.customer.id) == str(authorized_id)
 
-
-if not Group.objects.filter(name='customer'):
-	Group.objects.create(name='customer')
-if not Group.objects.filter(name='admin'):
-	Group.objects.create(name='admin')
