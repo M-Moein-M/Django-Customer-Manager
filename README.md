@@ -12,7 +12,9 @@ Simple shopping app.
 
 ---
 #### Credential file
-Some credentials are loaded from a file called **cred.txt**. This file is something like this:
+Some credentials are loaded from a file called **cred.txt**.
+Create a text file: /app/ContactManager/cred.txt
+The content of the file should be filled like this but with your credentials and values:
 ```
 {	
 "RES_PASS_EMAIL":"A",
