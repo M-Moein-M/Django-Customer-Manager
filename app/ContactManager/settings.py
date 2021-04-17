@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import json
+import os
 from django.contrib.messages import constants as messages
 
 
@@ -49,7 +50,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
-    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -86,18 +86,20 @@ WSGI_APPLICATION = 'ContactManager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+ALLOWED_HOSTS = ['*']
+
 ENV_CONFIG = {}
 with open(Path(__file__).parent / 'cred.txt', 'r') as f:
     ENV_CONFIG.update(json.loads(f.read()))
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'djangodb',
-        'USER': 'postgres',
-        'PASSWORD': ENV_CONFIG['LOCAL_DB_PASS'],
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': os.environ.get('DB_HOST'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASS'),
+        'PORT': 5432,
     }
 }
 
