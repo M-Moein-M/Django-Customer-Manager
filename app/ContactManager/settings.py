@@ -88,9 +88,6 @@ WSGI_APPLICATION = 'ContactManager.wsgi.application'
 
 ALLOWED_HOSTS = ['*']
 
-ENV_CONFIG = {}
-with open(Path(__file__).parent / 'cred.txt', 'r') as f:
-    ENV_CONFIG.update(json.loads(f.read()))
 
 DATABASES = {
     'default': {
@@ -149,6 +146,9 @@ MEDIA_ROOT = BASE_DIR / 'static' / 'images'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+with open(Path(__file__).parent / 'cred.txt', 'r') as f:
+    ENV_CONFIG = json.loads(f.read())
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

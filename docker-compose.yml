@@ -6,6 +6,7 @@ services:
             context: .
         ports:
             - "8000:8000"
+            - "587:587"
         volumes:
             - ./app:/app
         command: >
