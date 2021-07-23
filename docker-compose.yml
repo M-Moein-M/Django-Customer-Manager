@@ -5,7 +5,7 @@ services:
         build:
             context: .
         ports:
-            - "3000:3000"
+            - "8000:8000"
         volumes:
             - ./app:/app
         command: >
@@ -13,7 +13,7 @@ services:
                     python manage.py migrate && \
                     python manage.py create_groups && \
                     python manage.py create_default_superuser && \
-                    python manage.py runserver 0.0.0.0:3000"
+                    python manage.py runserver 0.0.0.0:8000"
         environment:
             - DB_HOST=db
             - DB_NAME=shoppingapp
