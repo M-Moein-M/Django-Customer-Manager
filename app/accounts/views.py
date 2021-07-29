@@ -108,27 +108,27 @@ class RegisterPage(View):
         return render(request, 'accounts/register.html', context)
 
 
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['admin'])
-def adminPage(request):
-    orders = Order.objects.order_by('date_created')
-    customers = Customer.objects.all()
+@method_decorator([login_required(login_url='login'),
+                   allowed_user(allowed_roles=['admin'])], name='get')
+class AdminPage(View):
+    def get(self, request):
+        orders = Order.objects.order_by('date_created')
+        customers = Customer.objects.all()
 
-    total_customers = customers.count()
-    total_orders = orders.count()
-    delivered = orders.filter(status='Delivered').count()
-    pending = orders.filter(status='Pending').count()
+        total_customers = customers.count()
+        total_orders = orders.count()
+        delivered = orders.filter(status='Delivered').count()
+        pending = orders.filter(status='Pending').count()
 
-    context = {
-        'orders': orders[:5],
-        'customers': customers,
-        'total_customers': total_customers,
-        'total_orders': total_orders,
-        'delivered': delivered,
-        'pending': pending
-    }
-
-    return render(request, 'accounts/dashboard.html', context)
+        context = {
+            'orders': orders[:5],
+            'customers': customers,
+            'total_customers': total_customers,
+            'total_orders': total_orders,
+            'delivered': delivered,
+            'pending': pending
+        }
+        return render(request, 'accounts/dashboard.html', context)
 
 
 @login_required(login_url='login')
