@@ -21,7 +21,7 @@ urlpatterns = [
     path('order/delete/<str:pk>', views.deleteOrder, name='delete_order'),
 
     path('register', views.registerPage, name='register'),
-    path('login', views.loginPage, name='login'),
+    path('login', views.LoginPage.as_view(), name='login'),
     path('logout', views.logoutUser, name='logout'),
 
     path('admin-page/', views.adminPage, name='admin_page'),

@@ -11,7 +11,9 @@ from .forms import *
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from .decorators import unauthenticated_user, allowed_user
+from django.views import View
 
 
 def redirect_groups(request, if_admin, if_customer):
@@ -61,9 +63,9 @@ def home(request):
     return render(request, 'accounts/user.html', context)
 
 
-@unauthenticated_user
-def loginPage(request):
-    if request.method == 'POST':
+class LoginPage(View):
+    @method_decorator(unauthenticated_user)
+    def post(self, request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
@@ -75,8 +77,10 @@ def loginPage(request):
         else:
             messages.error(request, 'Username or Password is Incorrect')
 
-    context = {}
-    return render(request, 'accounts/login.html', context)
+    @method_decorator(unauthenticated_user)
+    def get(self, request):
+        context = {}
+        return render(request, 'accounts/login.html', context)
 
 
 def logoutUser(request):
