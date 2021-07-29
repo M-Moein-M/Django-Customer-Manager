@@ -131,26 +131,27 @@ class AdminPage(View):
         return render(request, 'accounts/dashboard.html', context)
 
 
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
-def products(request):
-    return redirect_groups(request, if_admin='admin_products', if_customer='customer_products')
+@method_decorator([login_required(login_url='login'),
+                   allowed_user(allowed_roles=['admin', 'customer'])],
+                  name='get')
+class Products(View):
+    def get(self, request):
+        group = request.user.groups.all()[0].name
+        if group == 'admin':
+            return self.render_admin_products(request)
+        elif group == 'customer':
+            return self.render_customer_products(request)
 
+    def render_admin_products(self, request):
+        products = ProductListAdmin().get_product_list()
+        context = {'products': products,
+                   'show_availability': True}
+        return render(request, 'accounts/products.html', context)
 
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['admin'])
-def adminProducts(request):
-    products = ProductListAdmin().get_product_list()
-    context = {'products': products,
-               'show_availability': True}
-    return render(request, 'accounts/products.html', context)
+    def render_customer_products(self, request):
+        products = ProductListCustomer().get_product_list()
+        return render(request, 'accounts/products.html', {'products': products})
 
-
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['customer'])
-def customerProducts(request):
-    products = ProductListCustomer().get_product_list()
-    return render(request, 'accounts/products.html', {'products': products})
 
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin'])
