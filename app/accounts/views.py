@@ -83,9 +83,10 @@ class LoginPage(View):
         return render(request, 'accounts/login.html', context)
 
 
-def logoutUser(request):
-    logout(request)
-    return redirect('login')
+class LogoutUser(View):
+    def get(self, request):
+        logout(request)
+        return redirect('login')
 
 
 @unauthenticated_user

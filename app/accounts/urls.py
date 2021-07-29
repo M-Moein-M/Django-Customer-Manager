@@ -22,7 +22,7 @@ urlpatterns = [
 
     path('register', views.registerPage, name='register'),
     path('login', views.LoginPage.as_view(), name='login'),
-    path('logout', views.logoutUser, name='logout'),
+    path('logout', views.LogoutUser.as_view(), name='logout'),
 
     path('admin-page/', views.adminPage, name='admin_page'),
 
