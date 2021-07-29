@@ -16,17 +16,14 @@ from .decorators import unauthenticated_user, allowed_user
 from django.views import View
 
 
-def redirect_groups(request, if_admin, if_customer):
-    group = request.user.groups.all()[0].name
-    if group == 'admin':
-        return redirect(if_admin)
-    elif group == 'customer':
-        return redirect(if_customer)
-
-
-@login_required(login_url='login')
-def redirectHome(request):
-    return redirect_groups(request, if_admin='admin_page', if_customer='customer_page')
+class RedirectHome(View):
+    @method_decorator(login_required(login_url='login'))
+    def get(self, request):
+        group = request.user.groups.all()[0].name
+        if group == 'admin':
+            return redirect('admin_page')
+        elif group == 'customer':
+            return redirect('customer_page')
 
 
 @login_required(login_url='login')
