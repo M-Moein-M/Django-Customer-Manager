@@ -20,7 +20,7 @@ urlpatterns = [
     path('order/all/<str:page>', views.showOrders, name='all_order'),
     path('order/delete/<str:pk>', views.deleteOrder, name='delete_order'),
 
-    path('register', views.registerPage, name='register'),
+    path('register', views.RegisterPage.as_view(), name='register'),
     path('login', views.LoginPage.as_view(), name='login'),
     path('logout', views.LogoutUser.as_view(), name='logout'),
 

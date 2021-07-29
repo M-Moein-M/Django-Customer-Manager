@@ -89,20 +89,23 @@ class LogoutUser(View):
         return redirect('login')
 
 
-@unauthenticated_user
-def registerPage(request):
-    form = CreateUserForm()
-    if request.method == 'POST':
+class RegisterPage(View):
+    form_class = CreateUserForm
+
+    @method_decorator(unauthenticated_user)
+    def post(self, request):
         form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
-
-            messages.success(request, f'Account Was Created for {form.cleaned_data.get("username")}')
-
+            msg = f'Account Was Created for {form.cleaned_data.get("username")}'
+            messages.success(request, msg)
             return redirect('login')
 
-    context = {'form': form}
-    return render(request, 'accounts/register.html', context)
+    @method_decorator(unauthenticated_user)
+    def get(self, request):
+        form = self.form_class()
+        context = {'form': form}
+        return render(request, 'accounts/register.html', context)
 
 
 @login_required(login_url='login')
