@@ -265,20 +265,25 @@ class CreateOrder(View):
         return render(request, 'accounts/order_form.html', context)
 
 
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['admin'])
-def updateOrder(request, pk):
-    order = Order.objects.get(id=pk)
-    form = UpdateOrderForm(instance=order)
-    if request.method == 'POST':
+class UpdateOrder(View):
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['admin'])])
+    def post(self, request, pk):
+        order = Order.objects.get(id=pk)
         OrderUpdate(request, order).update_order()
         messages.success(request, 'Order Successfully Updated')
         return redirect('admin_page')
 
-    context = {'product': order.product,
-               'update_form': form,
-               'order_quantity': order.quantity}
-    return render(request, 'accounts/order_update.html', context)
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['admin'])])
+    def get(self, request, pk):
+        order = Order.objects.get(id=pk)
+        form = UpdateOrderForm(instance=order)
+
+        context = {'product': order.product,
+                   'update_form': form,
+                   'order_quantity': order.quantity}
+        return render(request, 'accounts/order_update.html', context)
 
 
 @login_required(login_url='login')
