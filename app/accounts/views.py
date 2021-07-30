@@ -26,22 +26,27 @@ class RedirectHome(View):
             return redirect('customer_page')
 
 
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['customer'])
-def accountSettings(request):
-    if request.method == 'POST':
+class AccountSettings(View):
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['customer'])])
+    def get(self, request):
+        customer = request.user.customer
+        form_initial = {'name': customer.name,
+                        'phone': customer.phone,
+                        'email': customer.user.email}
+        info_form = CustomerForm(data=form_initial, instance=customer)
+        profile_pic_form = ProfilePictureForm()
+        context = {'info_form': info_form,
+                   'profile_pic_form': profile_pic_form}
+
+        return render(request, 'accounts/accounts_settings.html', context)
+
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['customer'])])
+    def post(self, request):
         CustomerSettings(request).save_settings()
         messages.success(request, 'Account Settings Saved')
-    customer = request.user.customer
-    form_initial = {'name':customer.name,
-                    'phone':customer.phone,
-                    'email': customer.user.email}
-    info_form = CustomerForm(data=form_initial, instance=customer)
-    profile_pic_form = ProfilePictureForm()
-    context = {'info_form': info_form,
-               'profile_pic_form': profile_pic_form}
-
-    return render(request, 'accounts/accounts_settings.html', context)
+        return self.get(request)
 
 
 @login_required(login_url='login')
