@@ -215,32 +215,33 @@ class DeleteProduct(View):
         return render(request, 'accounts/product_delete.html', context)
 
 
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['admin', 'customer'])
-def customer(request, customer_id, page):
-    authorized = is_user_authorized_to_visit_page(request.user, customer_id)
-    if not authorized:
-        return redirect('/')
+class CustomerOrders(View):
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['admin', 'customer'])])
+    def get(self, request, customer_id, page):
+        authorized = is_user_authorized_to_visit_page(request.user, customer_id)
+        if not authorized:
+            return redirect('/')
 
-    customer = Customer.objects.get(id=customer_id)
-    orders = customer.order_set.all()
-    orders_count = orders.count()
+        customer = Customer.objects.get(id=customer_id)
+        orders = customer.order_set.all()
+        orders_count = orders.count()
 
-    page = int(page)
-    lister = OrdersListCustomer(request, page, customer_id)
-    orders = lister.get_orders()
-    filter_form = OrderFilterForm(initial=request.GET)
+        page = int(page)
+        lister = OrdersListCustomer(request, page, customer_id)
+        orders = lister.get_orders()
+        filter_form = OrderFilterForm(initial=request.GET)
 
-    context = {'customer': customer,
-               'orders': orders,
-               'orders_count': orders_count,
-               'filter_form': filter_form,
-               'next_page': page + 1,
-               'prev_page': page - 1,
-               'pages_count': lister.count_pages(),
-               }
+        context = {'customer': customer,
+                   'orders': orders,
+                   'orders_count': orders_count,
+                   'filter_form': filter_form,
+                   'next_page': page + 1,
+                   'prev_page': page - 1,
+                   'pages_count': lister.count_pages(),
+                   }
 
-    return render(request, 'accounts/customer.html', context)
+        return render(request, 'accounts/customer.html', context)
 
 
 @login_required(login_url='login')
