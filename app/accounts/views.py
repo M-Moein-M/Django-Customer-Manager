@@ -244,20 +244,25 @@ class CustomerOrders(View):
         return render(request, 'accounts/customer.html', context)
 
 
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['customer'])
-def createOrder(request, pk):
-    if request.method == 'POST':
+class CreateOrder(View):
+    form_class = NewOrderForm
+
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['customer'])])
+    def post(self, request, pk):
         NewOrderCustomer(request, pk).save_order()
         messages.success(request, 'Order Successfully Saved.')
         return redirect('products')
 
-    product = Product.objects.get(id=pk)
-    context = {'product_name': product.name,
-               'product_pic': product.product_pic,
-               'product_price': product.price,
-               'new_order_form': NewOrderForm(initial={'quantity': 1})}
-    return render(request, 'accounts/order_form.html', context)
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['customer'])])
+    def get(self, request, pk):
+        product = Product.objects.get(id=pk)
+        context = {'product_name': product.name,
+                   'product_pic': product.product_pic,
+                   'product_price': product.price,
+                   'new_order_form': self.form_class(initial={'quantity': 1})}
+        return render(request, 'accounts/order_form.html', context)
 
 
 @login_required(login_url='login')
