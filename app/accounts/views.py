@@ -323,17 +323,18 @@ class DeleteOrder(View):
         return render(request, 'accounts/delete_order.html', context)
 
 
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['admin'])
-def showOrders(request, page):
-    page = int(page)
-    lister = OrdersListAdmin(request, page)
-    orders = lister.get_orders()
-    filter_form = OrderFilterForm(initial=request.GET)
-    context = {'orders': orders,
-               'page': page,
-               'next_page': page+1,
-               'prev_page': page-1,
-               'pages_count': lister.count_pages(),
-               'filter_form': filter_form}
-    return render(request, 'accounts/order_all.html', context)
+class ShowOrders(View):
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['admin'])])
+    def get(self, request, page):
+        page = int(page)
+        lister = OrdersListAdmin(request, page)
+        orders = lister.get_orders()
+        filter_form = OrderFilterForm(initial=request.GET)
+        context = {'orders': orders,
+                   'page': page,
+                   'next_page': page + 1,
+                   'prev_page': page - 1,
+                   'pages_count': lister.count_pages(),
+                   'filter_form': filter_form}
+        return render(request, 'accounts/order_all.html', context)
