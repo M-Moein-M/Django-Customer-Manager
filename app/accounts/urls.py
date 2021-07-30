@@ -5,7 +5,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.RedirectHome.as_view(), name='home'),
-    path('customer-page/', views.home, name='customer_page'),
+    path('customer-page/', views.Home.as_view(), name='customer_page'),
     path('customer/<str:customer_id>/<str:page>', views.customer, name='customer'),
 
     path('products/', views.Products.as_view(), name='products'),

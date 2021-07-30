@@ -49,20 +49,21 @@ class AccountSettings(View):
         return self.get(request)
 
 
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['customer'])
-def home(request):
-    orders = request.user.customer.order_set.all()
+@method_decorator([login_required(login_url='login'),
+                   allowed_user(allowed_roles=['customer'])], name='get')
+class Home(View):
+    def get(self, request):
+        orders = request.user.customer.order_set.all()
 
-    total_orders = orders.count()
-    delivered = orders.filter(status='Delivered').count()
-    pending = orders.filter(status='Pending').count()
+        total_orders = orders.count()
+        delivered = orders.filter(status='Delivered').count()
+        pending = orders.filter(status='Pending').count()
 
-    context = {'orders': orders,
-               'total_orders': total_orders,
-                'delivered': delivered,
-                'pending': pending}
-    return render(request, 'accounts/user.html', context)
+        context = {'orders': orders,
+                   'total_orders': total_orders,
+                   'delivered': delivered,
+                   'pending': pending}
+        return render(request, 'accounts/user.html', context)
 
 
 class LoginPage(View):
