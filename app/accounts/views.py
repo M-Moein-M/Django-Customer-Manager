@@ -195,20 +195,24 @@ class NewProduct(View):
         return render(request, 'accounts/new_product.html', context)
 
 
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['admin'])
-def deleteProduct(request, pk):
-    if request.method == 'POST':
+class DeleteProduct(View):
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['admin'])])
+    def post(self, request, pk):
         ProductDeleter(pk).delete_product()
         messages.success(request, 'Product Successfully Deleted')
         return redirect('products')
-    product = Product.objects.get(id=pk)
-    related_orders = Order.objects.filter(product__id=pk)
-    context = {'related_orders': related_orders,
-               'product_name': product.name,
-               'orders': related_orders,
-               'product_pic': product.product_pic}
-    return render(request, 'accounts/product_delete.html', context)
+
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['admin'])])
+    def get(self, request, pk):
+        product = Product.objects.get(id=pk)
+        related_orders = Order.objects.filter(product__id=pk)
+        context = {'related_orders': related_orders,
+                   'product_name': product.name,
+                   'orders': related_orders,
+                   'product_pic': product.product_pic}
+        return render(request, 'accounts/product_delete.html', context)
 
 
 @login_required(login_url='login')
