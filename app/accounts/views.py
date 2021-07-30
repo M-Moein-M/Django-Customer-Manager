@@ -286,28 +286,41 @@ class UpdateOrder(View):
         return render(request, 'accounts/order_update.html', context)
 
 
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['customer'])
-def deleteOrder(request, pk):
-    order = Order.objects.get(id=pk)
-    authorized = is_user_authorized_to_visit_page(request.user, order.customer.id)
-    if not authorized:
-        messages.error(request, "You're Not Authorized to Change This Order")
-        return redirect('customer', customer_id=request.user.id)
+class DeleteOrder(View):
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['customer'])])
+    def post(self, request, pk):
+        order = Order.objects.get(id=pk)
+        authorized = is_user_authorized_to_visit_page(request.user,
+                                                      order.customer.id)
+        if not authorized:
+            msg = "You're Not Authorized to Change This Order"
+            messages.error(request, msg)
+            return redirect('customer', customer_id=request.user.id, page='1')
 
-    if request.method == 'POST':
         deleter = OrderDeleter(order)
         deleter.delete_order()
         status = deleter.get_delete_status()
         if status['status'] == 'success':
             messages.success(request, status['msg'])
-            return redirect('customer', customer_id=request.user.id)
+            return redirect('customer', customer_id=request.user.id, page='1')
         else:
             messages.error(request, status['msg'])
-            return redirect('customer', customer_id=request.user.id)
+            return redirect('customer', customer_id=request.user.id, page='1')
 
-    context = {'item': order}
-    return render(request, 'accounts/delete_order.html', context)
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['customer'])])
+    def get(self, request, pk):
+        order = Order.objects.get(id=pk)
+        authorized = is_user_authorized_to_visit_page(request.user,
+                                                      order.customer.id)
+        if not authorized:
+            msg = "You're Not Authorized to Change This Order"
+            messages.error(request, msg)
+            return redirect('customer', customer_id=request.user.id, page='1')
+
+        context = {'item': order}
+        return render(request, 'accounts/delete_order.html', context)
 
 
 @login_required(login_url='login')
