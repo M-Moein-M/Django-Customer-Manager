@@ -177,16 +177,22 @@ class EditProduct(View):
         return redirect('edit_product', pk=pk)
 
 
-@login_required(login_url='login')
-@allowed_user(allowed_roles=['admin'])
-def newProduct(request):
-    if request.method == 'POST':
+class NewProduct(View):
+    form_class = NewProductForm
+
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['admin'])])
+    def post(self, request):
         SaveNewProduct(request).create_new_product()
         messages.success(request, 'New Product Successfully Saved')
         return redirect('new_product')
-    prodForm = NewProductForm()
-    context = {'prodForm': prodForm}
-    return render(request, 'accounts/new_product.html', context)
+
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['admin'])])
+    def get(self, request):
+        prodForm = self.form_class()
+        context = {'prodForm': prodForm}
+        return render(request, 'accounts/new_product.html', context)
 
 
 @login_required(login_url='login')
