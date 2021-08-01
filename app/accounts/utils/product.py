@@ -12,12 +12,13 @@ def replace_product_ins_with_subclass_ins(prod_list):
 
 
 class SaveNewProduct:
-	def __init__(self, request, edit_instance=None):
+	def __init__(self, request, edit_instance=None, form_class=NewProductForm):
 		self.request = request
 		self.product = None
-		self.prod_form = NewProductForm(self.request.POST,
-										self.request.FILES,
-										instance=edit_instance)
+		self.prod_form = form_class(
+									self.request.POST,
+									self.request.FILES,
+									instance=edit_instance)
 
 	def create_new_product(self):
 		if self.prod_form.is_valid():

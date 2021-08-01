@@ -134,6 +134,22 @@ class AdminPage(View):
         return render(request, 'accounts/dashboard.html', context)
 
 
+class NewPack(View):
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['admin'])])
+    def get(self, request):
+        context = {'packForm': NewPackForm()}
+        return render(request, 'accounts/new_pack.html', context)
+
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['admin'])])
+    def post(self, request):
+        # SaveNewPack(request).create_new_pack()
+        SaveNewProduct(request, form_class=NewPackForm).create_new_product()
+        messages.success(request, 'New Pack Successfully Saved')
+        return redirect('new_pack')
+
+
 @method_decorator([login_required(login_url='login'),
                    allowed_user(allowed_roles=['admin', 'customer'])],
                   name='get')
