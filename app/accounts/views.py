@@ -150,6 +150,29 @@ class NewPack(View):
         return redirect('new_pack')
 
 
+class EditPack(View):
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['admin'])])
+    def get(self, request, pk):
+        pack = Pack.objects.get(id=pk)
+        tags = ', '.join([t.name for t in pack.tags.all()])
+        edit_form = NewPackForm(initial={'tags': tags},
+                                instance=pack)
+        context = {'product_pic': pack.product_pic,
+                   'edit_form': edit_form}
+        return render(request, 'accounts/pack_edit.html', context)
+
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['admin'])])
+    def post(self, request, pk):
+        pack = Pack.objects.get(id=pk)
+        SaveNewProduct(request,
+                       edit_instance=pack,
+                       form_class=NewPackForm).create_new_product()
+        messages.success(request, 'Pack Successfully Edited')
+        return redirect('edit_pack', pk=pk)
+
+
 @method_decorator([login_required(login_url='login'),
                    allowed_user(allowed_roles=['admin', 'customer'])],
                   name='get')
@@ -176,6 +199,9 @@ class EditProduct(View):
     @method_decorator([login_required(login_url='login'),
                        allowed_user(allowed_roles=['admin'])])
     def get(self, request, pk):
+        if self.is_subclass_instance(pk):
+            return redirect('edit_pack', pk=pk)
+
         product = Product.objects.get(id=pk)
         tags = ', '.join([t.name for t in product.tags.all()])
         edit_form = NewProductForm(initial={'tags': tags},
@@ -187,10 +213,17 @@ class EditProduct(View):
     @method_decorator([login_required(login_url='login'),
                        allowed_user(allowed_roles=['admin'])])
     def post(self, request, pk):
+        if self.is_subclass_instance(pk):
+            messages.error(request, 'Edit Was Not Saved! Try Again')
+            return redirect('edit_pack', pk=pk)
+
         product = Product.objects.get(id=pk)
         SaveNewProduct(request, edit_instance=product).create_new_product()
         messages.success(request, 'Product Successfully Edited')
         return redirect('edit_product', pk=pk)
+
+    def is_subclass_instance(self, pk):
+        return Pack.objects.filter(id=pk).exists()
 
 
 class NewProduct(View):
