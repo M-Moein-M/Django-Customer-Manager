@@ -6,6 +6,20 @@ from django import forms
 from django.contrib.auth.models import User
 import pytz
 
+
+class NewPackForm(ModelForm):
+	class Meta:
+		model = Pack
+		exclude = ['tags', 'product_pic']
+
+	tags = forms.CharField(max_length=250)
+	product_pic = forms.ImageField(required=False)
+	products = forms.ModelMultipleChoiceField(
+		queryset=Product.objects.filter(availability='Available').order_by('-date_created'),
+		widget=forms.SelectMultiple
+	)
+
+
 class UpdateOrderForm(ModelForm):
 	class Meta:
 		model = Order
@@ -25,6 +39,7 @@ class CustomerForm(ModelForm):
 		exclude = ['user', 'profile_pic']
 
 	email = forms.CharField(max_length=200)
+
 
 class ProfilePictureForm(forms.Form):
 	profile_pic = forms.ImageField()
