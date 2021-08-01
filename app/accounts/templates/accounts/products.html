@@ -6,14 +6,14 @@
 <div class="row m-1 justify-content-center">
     {% for i in products %}
     <div class="col-md-6 col-lg-4">
-        <div class="card m-1">
+        <div class="card m-1" style="background-color: {% if i.is_sub_of_product %} #EC407A {% else %} '' {% endif %}">
             <div style="background-image:url('{{i.product_pic}}'); height: 300px; width: auto;background-position: 50% 50%;
                         background-repeat: no-repeat;
                         background-size: cover;">
             </div>
-            <div class="card-body">
+            <div class="card-body" >
                 <p><h4>{{i}}</h4></p>
-                <p><strong>{{i.description}}</strong></p>
+                <p><strong>{% if i.description %}{{i.description}} {% else %} **No Description** {% endif%}</strong></p>
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">

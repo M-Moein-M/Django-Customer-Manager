@@ -7,7 +7,14 @@ def replace_product_ins_with_subclass_ins(prod_list):
 	res = []
 	for i, prod in enumerate(prod_list):
 		pack = Pack.objects.filter(id=prod.id)
-		res.append(prod if not pack else pack[0])
+		if pack:
+			pack = pack[0]
+			# used in template for rendering different bg
+			setattr(pack, 'is_sub_of_product', True)
+			res.append(pack)
+		else:
+			setattr(prod, 'is_sub_of_product', False)
+			res.append(prod)
 	return res
 
 
