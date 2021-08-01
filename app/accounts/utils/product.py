@@ -1,6 +1,14 @@
 from ..forms import NewProductForm
-from ..models import Tag, Product
+from ..models import Tag, Product, Pack
 from .img_file_upload import ImgFieldUploader
+
+
+def replace_product_ins_with_subclass_ins(prod_list):
+	res = []
+	for i, prod in enumerate(prod_list):
+		pack = Pack.objects.filter(id=prod.id)
+		res.append(prod if not pack else pack[0])
+	return res
 
 
 class SaveNewProduct:
