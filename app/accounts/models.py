@@ -47,6 +47,17 @@ class Product(models.Model):
 		return self.name
 
 
+class Pack(Product):
+	products = models.ManyToManyField(Product, related_name='plist')
+
+	def __str__(self):
+		product_list = ''
+		for i, v in enumerate(self.products.all()):
+			product_list += str(v) + (', ' if i != len(self.products.all())-1 else '')
+
+		return self.name + (f'({product_list})' if product_list else '')
+
+
 class Order(models.Model):
 	STATUS = (
 		('Pending', 'Pending'),
