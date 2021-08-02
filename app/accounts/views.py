@@ -207,6 +207,9 @@ class EditProduct(View):
         edit_form = NewProductForm(initial={'tags': tags},
                                    instance=product)
         context = {'product_pic': product.product_pic,
+                   'm2m_field_form': ManyToManyFieldForm(
+                       choice_queryset=Pack.objects.all(),
+                       label='Add to Pack'),
                    'edit_form': edit_form}
         return render(request, 'accounts/product_edit.html', context)
 
