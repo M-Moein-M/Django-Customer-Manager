@@ -7,6 +7,17 @@ from django.contrib.auth.models import User
 import pytz
 
 
+class ManyToManyFieldForm(forms.Form):
+	m2m_field = forms.MultipleChoiceField()
+
+	def __init__(self, choice_queryset, label, *args, **kwargs):
+		queryset = [(p.id, p) for p in choice_queryset]
+		super(ManyToManyFieldForm, self).__init__(*args, **kwargs)
+
+		self.fields['m2m_field'].choices = queryset
+		self.fields['m2m_field'].label = label
+
+
 class NewPackForm(ModelForm):
 	class Meta:
 		model = Pack
