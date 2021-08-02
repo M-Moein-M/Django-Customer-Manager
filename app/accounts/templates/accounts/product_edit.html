@@ -22,6 +22,17 @@
                     <a class="btn btn-danger" href="{% url 'products'%}">Cancel</a>
                 </form>
             </div>
+            <div class="card-body">
+                <form action="{% url 'add_product_to_pack' pk %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {{ m2m_field_form.as_p }}
+
+                    <input class="btn btn-success" type="submit" name="submit">
+                    <a class="btn btn-danger"
+                       href="{% url 'products'%}">Cancel</a>
+                </form>
+            </div>
 
         </div>
     </div>

@@ -17,6 +17,7 @@ urlpatterns = [
 
     path('products/new/', views.NewProduct.as_view(), name='new_product'),
     path('products/edit/<str:pk>', views.EditProduct.as_view(), name='edit_product'),
+    path('products/edit/add-to-pack/<str:pk>', views.AddProductToPack.as_view(), name='add_product_to_pack'),
     path('products/delete/<str:pk>', views.DeleteProduct.as_view(), name='delete_product'),
 
     path('order/new/<str:pk>', views.CreateOrder.as_view(), name='create_order'),

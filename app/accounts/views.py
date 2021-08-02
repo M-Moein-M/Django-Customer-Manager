@@ -173,6 +173,20 @@ class EditPack(View):
         return redirect('edit_pack', pk=pk)
 
 
+class AddProductToPack(View):
+    @method_decorator([login_required(login_url='login'),
+                       allowed_user(allowed_roles=['admin'])])
+    def post(self, request, pk):
+        form = ProductManyToManyFieldForm(request.POST)
+        if form.is_valid():
+            packs_id = form.cleaned_data.get("m2m_field")
+            prod = Product.objects.get(id=pk)
+            prod.plist.clear()
+            for p in packs_id:
+                prod.plist.add(Pack.objects.get(id=int(p)))
+        return redirect('edit_product', pk)
+
+
 @method_decorator([login_required(login_url='login'),
                    allowed_user(allowed_roles=['admin', 'customer'])],
                   name='get')
@@ -207,10 +221,9 @@ class EditProduct(View):
         edit_form = NewProductForm(initial={'tags': tags},
                                    instance=product)
         context = {'product_pic': product.product_pic,
-                   'm2m_field_form': ManyToManyFieldForm(
-                       choice_queryset=Pack.objects.all(),
-                       label='Add to Pack'),
-                   'edit_form': edit_form}
+                   'm2m_field_form': ProductManyToManyFieldForm(),
+                   'edit_form': edit_form,
+                   'pk': pk}
         return render(request, 'accounts/product_edit.html', context)
 
     @method_decorator([login_required(login_url='login'),
