@@ -7,15 +7,10 @@ from django.contrib.auth.models import User
 import pytz
 
 
-class ManyToManyFieldForm(forms.Form):
-	m2m_field = forms.MultipleChoiceField()
-
-	def __init__(self, choice_queryset, label, *args, **kwargs):
-		queryset = [(p.id, p) for p in choice_queryset]
-		super(ManyToManyFieldForm, self).__init__(*args, **kwargs)
-
-		self.fields['m2m_field'].choices = queryset
-		self.fields['m2m_field'].label = label
+class ProductManyToManyFieldForm(forms.Form):
+	m2m_field = forms.MultipleChoiceField(required=False,
+										  choices=[(p.id, p) for p in Pack.objects.all()],
+										  label='Add To Packs')
 
 
 class NewPackForm(ModelForm):
