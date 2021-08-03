@@ -1,7 +1,7 @@
 # Django-Customer-Manager
 Simple shopping app.
 
-Just run 
+Set the cred.txt file(read below) and just run 
 ```
 docker-compose up
 ```
