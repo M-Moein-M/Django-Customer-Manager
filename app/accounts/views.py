@@ -144,7 +144,6 @@ class NewPack(View):
     @method_decorator([login_required(login_url='login'),
                        allowed_user(allowed_roles=['admin'])])
     def post(self, request):
-        # SaveNewPack(request).create_new_pack()
         SaveNewProduct(request, form_class=NewPackForm).create_new_product()
         messages.success(request, 'New Pack Successfully Saved')
         return redirect('new_pack')
@@ -154,23 +153,29 @@ class EditPack(View):
     @method_decorator([login_required(login_url='login'),
                        allowed_user(allowed_roles=['admin'])])
     def get(self, request, pk):
+        context = self.create_page_context(pk)
+        return render(request, 'accounts/pack_edit.html', context)
+
+    def create_page_context(self, pk):
         pack = Pack.objects.get(id=pk)
         tags = ', '.join([t.name for t in pack.tags.all()])
         edit_form = NewPackForm(initial={'tags': tags},
                                 instance=pack)
-        context = {'product_pic': pack.product_pic,
+        return {'product_pic': pack.product_pic,
                    'edit_form': edit_form}
-        return render(request, 'accounts/pack_edit.html', context)
 
     @method_decorator([login_required(login_url='login'),
                        allowed_user(allowed_roles=['admin'])])
     def post(self, request, pk):
+        self.save_pack_changes(pk, request)
+        messages.success(request, 'Pack Successfully Edited')
+        return redirect('edit_pack', pk=pk)
+
+    def save_pack_changes(self, pk, request):
         pack = Pack.objects.get(id=pk)
         SaveNewProduct(request,
                        edit_instance=pack,
                        form_class=NewPackForm).create_new_product()
-        messages.success(request, 'Pack Successfully Edited')
-        return redirect('edit_pack', pk=pk)
 
 
 class AddProductToPack(View):
