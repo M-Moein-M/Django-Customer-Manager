@@ -3,17 +3,30 @@
 {% block content %}
 <br>
 <h3>Products</h3>
+<div class="row m-3">
+    <form action="" method="get">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox"
+                   name="packs_only" id="packs_only" value="true">
+            <label class="form-check-label" for="packs_only">Packs Only</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
 <div class="row m-1 justify-content-center">
+
     {% for i in products %}
     <div class="col-md-6 col-lg-4">
-        <div class="card m-1" style="background-color: {% if i.is_sub_of_product %} #EC407A {% else %} '' {% endif %}">
+        <div class="card m-1"
+             style="background-color: {% if i.is_sub_of_product %} #EC407A {% else %} '' {% endif %}">
             <div style="background-image:url('{{i.product_pic}}'); height: 300px; width: auto;background-position: 50% 50%;
                         background-repeat: no-repeat;
                         background-size: cover;">
             </div>
-            <div class="card-body" >
+            <div class="card-body">
                 <p><h4>{{i}}</h4></p>
-                <p><strong>{% if i.description %}{{i.description}} {% else %} **No Description** {% endif%}</strong></p>
+                <p><strong>{% if i.description %}{{i.description}} {% else %}
+                    **No Description** {% endif%}</strong></p>
             </div>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
@@ -22,17 +35,21 @@
                     {% endif %}
                     <span class="badge bg-info text-white">{{i.category}}</span>
                     {% for t in i.tags.all %}
-                        <span class="badge bg-secondary text-white">{{t.name}}</span>
+                    <span class="badge bg-secondary text-white">{{t.name}}</span>
                     {% endfor %}
                 </li>
                 <li class="list-group-item">{{i.price}}$</li>
                 <li class="list-group-item">
                     <div class="btn-group" style="width:100%">
                         {% if request.user.is_staff %}
-                        <a class="btn btn-outline-dark m-1 btn-block" href="{% url 'edit_product' i.id %}">Edit Product</a>
-                        <a class="btn btn-outline-danger m-1 btn-block" href="{% url 'delete_product' i.id %}">Delete Product</a>
+                        <a class="btn btn-outline-dark m-1 btn-block"
+                           href="{% url 'edit_product' i.id %}">Edit Product</a>
+                        <a class="btn btn-outline-danger m-1 btn-block"
+                           href="{% url 'delete_product' i.id %}">Delete
+                            Product</a>
                         {% else %}
-                        <a class="btn btn-outline-dark m-1 btn-block" href="{% url 'create_order' i.id %}">Place Order</a>
+                        <a class="btn btn-outline-dark m-1 btn-block"
+                           href="{% url 'create_order' i.id %}">Place Order</a>
                         {% endif %}
                     </div>
                 </li>

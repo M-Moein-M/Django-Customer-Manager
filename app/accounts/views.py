@@ -192,20 +192,21 @@ class AddProductToPack(View):
                   name='get')
 class Products(View):
     def get(self, request):
+        only_packs = request.GET.get('packs_only') == 'true'
         group = request.user.groups.all()[0].name
         if group == 'admin':
-            return self.render_admin_products(request)
+            return self.render_admin_products(request, only_packs)
         elif group == 'customer':
-            return self.render_customer_products(request)
+            return self.render_customer_products(request, only_packs)
 
-    def render_admin_products(self, request):
-        products = ProductListAdmin().get_product_list()
+    def render_admin_products(self, request, only_packs):
+        products = ProductListAdmin(only_packs).get_product_list()
         context = {'products': products,
                    'show_availability': True}
         return render(request, 'accounts/products.html', context)
 
-    def render_customer_products(self, request):
-        products = ProductListCustomer().get_product_list()
+    def render_customer_products(self, request, only_packs):
+        products = ProductListCustomer(only_packs).get_product_list()
         return render(request, 'accounts/products.html', {'products': products})
 
 
